@@ -22,10 +22,8 @@ const unsigned char palette[32]={
 };
 
 uint16_t framenum;
-uint8_t load_bank;
 uint8_t player_pad;
 uint8_t player_pad_changed;
-uint8_t spridx;
 
 enum GameMode {
     TITLE_SCREEN,
@@ -38,74 +36,19 @@ enum GameMode game_state;
 
 void main(void)
 {
-    static uint8_t state;
     bank_bg(0);
     bank_spr(1);
     ppu_off();
     pal_all(palette); //set palette for sprites
     oam_size(1);
     ppu_on_all();
-    //entity_load_screen();
+
     for(framenum=0;;++framenum) {
-        //wait for next TV frame
-        writereg8(0x4019, 0);
         ppu_waitnmi();
-        writereg8(0x4019, 1);
         oam_clear();
         player_pad_changed = pad_trigger(0);
         player_pad = pad_state(0);
 
-        switch(game_state) {
-            case TITLE_SCREEN:
-                scroll(framenum, 32);
-                if (player_pad_changed & PAD_START) {
-                    load_bank = header0.next_bank;
-                    game_state = LOAD_NEXT;
-                }
-                break;
-            case LOAD_NEXT:
-                ppu_off();
-                set_mmc3_low_bank(load_bank);
-                entity_kill_all();
-                copy_to_vram_simple(0, 0);
-                copy_to_vram_simple(1, 1);
-                entity_spawn_screen(0);
-                entity_taken_reset();
-                entity_set_player(header0.start_px, header0.start_py, true);
-                ppu_on_all();
-                game_state = GAME;
-                break;
-            case GAME:
-                entity_newframe();
-                state = entity_player_control();
-                if (state == PLAYER_DEAD) {
-                    entity_player_checkpoint();
-                    break;
-                } else if (state == PLAYER_DONE) {
-                    if (!entity_player_addpoints()) {
-                        load_bank = header0.next_bank;
-                        game_state = LOAD_NEXT;
-                        break;
-                    }
-                } else {
-                    entity_update_all();
-                    entity_compute_position(0);
-                }
-                entity_draw(0);
-                entity_draw_all();
-                if (player_pad_changed & PAD_START)
-                    game_state = PAUSE;
-
-                break;
-            case PAUSE:
-                pause();
-                entity_draw(0);
-                entity_draw_all();
-                if (player_pad_changed & PAD_START)
-                    game_state = GAME;
-                break;
-            default:
-                game_state = GAME;
-        }
+        // game code here.
     }
 }

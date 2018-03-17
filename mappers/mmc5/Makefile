@@ -3,14 +3,14 @@ include ../../toolchain.mk
 .PHONY: clean 
 .PRECIOUS: *.o
 
-SRCS=
+SRCS=macro.c
 OBJS=$(SRCS:.c=.o) crt0.o
 ASMS=$(SRCS:.c=.s)
 
 libinit.a: $(OBJS)
 	$(AR) r $@ $(OBJS)
 
-crt0.o: crt0.s
+crt0.o: crt0.S famitone.S music.S neslib.S sounds.S
 	$(AS) $<
 
 %.o: %.c

@@ -86,6 +86,14 @@ update(unsigned char x, unsigned char y, unsigned char val);
 
 #define vram_put_data(d_) writereg8(PPU_DATA, d_)
 
+//////////////////////////////////////////////////////////////////////
+// PPU macro functions in mappers/mmc5/neslib.s
+//////////////////////////////////////////////////////////////////////
+extern uint8_t ppu_macro_len;
+extern uint8_t ppu_macro[];
+#define ppu_macro_reset() (ppu_macro_len = 0)
+void __fastcall__ ppu_macro_byte(uint8_t b);
+void __fastcall__ ppu_macro_word(uint16_t b);
 
 extern void __fastcall__
 xputs(const char *str);

@@ -7,15 +7,19 @@
 	.export _oam_clear,_oam_size,_oam_spr,_oam_meta_spr,_oam_hide_rest
 	.export _ppu_waitnmi
 	.export _unrle_vram
-	.export _scroll
+	.export _set_split
+	.export _scroll0, _scroll1
 	.export _bank_spr,_bank_bg
 	.export _vram_read,_vram_write
 	.export _music_play,_music_stop,_music_pause
 	.export _sfx_play
 	.export _pad_poll,_pad_trigger,_pad_state
 	.export _rand8,_rand16,_set_rand
-	.export _set_vram_update,_vram_adr,_vram_put,_vram_fill,_vram_inc
+    .export _ppu_macro_byte, _ppu_macro_word
+	;.export _set_vram_update,_vram_adr,_vram_put,_vram_fill,_vram_inc
+	.export _vram_adr,_vram_put,_vram_fill,_vram_inc
 	.export _memcpy,_memfill,_delay
+    .import _ppu_macro_len, _ppu_macro
 
 
 ;NMI handler
@@ -64,33 +68,56 @@ nmi:
 
 @upd1:
 
-	ldx <NAME_UPD_LEN
+	ldx _ppu_macro_len
 	beq @skipUpd
 	ldy #0
 @updName:
-	lda (NAME_UPD_ADR),y
-	iny
-	sta PPU_ADDR
-	lda (NAME_UPD_ADR),y
-	iny
-	sta PPU_ADDR
-	lda (NAME_UPD_ADR),y
-	iny
+	lda _ppu_macro,y
+    iny
+    sta PPU_ADDR
+	lda _ppu_macro,y
+    iny
+    sta PPU_ADDR
+
+	lda _ppu_macro,y
+    and #$80
+    bne @updVert
+	lda <PPU_CTRL_VAR
+    and #$fb
+    bne @updDir
+@updVert:
+	lda <PPU_CTRL_VAR
+    ora #$04
+@updDir:
+    sta PPU_CTRL
+	lda _ppu_macro,y
+    iny
+    and #$7f
+    tax
+
+@updPPU:
+	lda _ppu_macro,y
+    iny
 	sta PPU_DATA
 	dex
-	bne @updName
+	bne @updPPU
+    
+    cpy _ppu_macro_len
+    bne @updName
+	ldy #0
+    sty _ppu_macro_len
 
 @skipUpd:
 	stx PPU_ADDR
 	stx PPU_ADDR
 
-    lda $2002
-	lda #0
-	sta PPU_SCROLL
-	sta PPU_SCROLL
-	lda <PPU_CTRL_VAR
-    and #$fc
-	sta PPU_CTRL
+    ; Set the region0 scroll registers
+    lda <SCROLL_X0
+    sta PPU_SCROLL
+    lda <SCROLL_Y0
+    sta PPU_SCROLL
+    lda <PPU_CTRL_VAR
+    sta PPU_CTRL
 
 	inc <FRAMECNT1
 	jsr FamiToneUpdate
@@ -112,27 +139,17 @@ irq:
     and #$80
     beq @irqexit
 
-    inc $1f
-    ; turn off NMI just in case
-    lda <PPU_CTRL_VAR
-    and #$7f
-    sta PPU_CTRL
-
     lda $2002           ;reset the ppu toggle
     ; Order of writes from "Split X/Y scroll" section on
     ; https://wiki.nesdev.com/w/index.php/PPU_scrolling
 	lda <SCROLL_NT
 	sta PPU_ADDR
-	lda <SCROLL_Y
+	lda <SCROLL_Y1
 	sta PPU_SCROLL
-	lda <SCROLL_X
+	lda <SCROLL_X1
 	sta PPU_SCROLL
     lda <SCROLL_ADDR
     sta PPU_ADDR
-
-    ; turn NMI back on
-    lda <PPU_CTRL_VAR
-    sta PPU_CTRL
 
 @irqexit:
     pla
@@ -504,11 +521,20 @@ _unrle_vram:
 @4:
 	rts
 
+;void __fastcall__ set_split(unsigned char ypos);
 
+_set_split:
+    sta $5203
+    cmp #0
+    beq @1
+    lda #$80
+@1:
+    sta $5204
+    rts
 
-;void __fastcall__ scroll(unsigned int x,unsigned int y);
+;void __fastcall__ scroll0(unsigned int x,unsigned int y);
 
-_scroll:
+_scroll0:
 	sta <TEMP
 
 	txa
@@ -516,7 +542,7 @@ _scroll:
 	lda <TEMP
 	cmp #240
 	bcs @1
-	sta <SCROLL_Y
+	sta <SCROLL_Y0
 	lda #0
 	sta <TEMP
 	beq @2	;bra
@@ -525,7 +551,43 @@ _scroll:
 	sec
 	lda <TEMP
 	sbc #240
-	sta <SCROLL_Y
+	sta <SCROLL_Y0
+	lda #2
+	sta <TEMP
+@2:
+
+	jsr popax
+	sta <SCROLL_X0
+	txa
+	and #$01
+	ora <TEMP
+	sta <TEMP
+	lda <PPU_CTRL_VAR
+	and #$fc
+	ora <TEMP
+	sta <PPU_CTRL_VAR
+	rts
+
+;void __fastcall__ scroll1(unsigned int x,unsigned int y);
+
+_scroll1:
+	sta <TEMP
+
+	txa
+	bne @1
+	lda <TEMP
+	cmp #240
+	bcs @1
+	sta <SCROLL_Y1
+	lda #0
+	sta <TEMP
+	beq @2	;bra
+
+@1:
+	sec
+	lda <TEMP
+	sbc #240
+	sta <SCROLL_Y1
 	lda #2
 	sta <TEMP
 @2:
@@ -536,7 +598,7 @@ _scroll:
     ; https://wiki.nesdev.com/w/index.php/PPU_scrolling
 
     ; The nametable is stored as (NT << 2)
-	sta <SCROLL_X
+	sta <SCROLL_X1
 	txa
 	and #$01
 	ora <TEMP
@@ -545,12 +607,12 @@ _scroll:
     sta <SCROLL_NT
 
     ; The PPU_ADDR is computed as ((X & 0xF8) >> 3 | (Y & 0x38) << 2)
-    lda <SCROLL_X
+    lda <SCROLL_X1
     lsr
     lsr
     lsr
     sta <TEMP
-    lda <SCROLL_Y
+    lda <SCROLL_Y1
     and #$38
     asl
     asl
@@ -813,17 +875,24 @@ _set_rand:
 	rts
 
 
+; void __fastcall__ ppu_macro_byte(uint8_t b);
+_ppu_macro_byte:
+    ldy     _ppu_macro_len
+    sta     _ppu_macro,y
+    iny
+    sty     _ppu_macro_len
+    rts
 
-;void __fastcall__ set_vram_update(unsigned char len,unsigned char *buf);
-
-_set_vram_update:
-	sta <NAME_UPD_ADR
-	stx <NAME_UPD_ADR+1
-	jsr popa
-	sta <NAME_UPD_LEN
-	rts
-
-
+; void __fastcall__ ppu_macro_word(uint16_t b);
+_ppu_macro_word:
+    ldy     _ppu_macro_len
+    sta     _ppu_macro+1,y
+    txa
+    sta     _ppu_macro,y
+    iny
+    iny
+    sty     _ppu_macro_len
+    rts
 
 ;void __fastcall__ vram_adr(unsigned int adr);
 
@@ -1009,4 +1078,4 @@ palBrightTable:
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 
-.include "famitone.s"
+.include "famitone.S"

@@ -21,6 +21,8 @@ const unsigned char palette[32]={
 uint16_t framenum;
 uint8_t player_pad;
 uint8_t player_pad_changed;
+uint8_t pad;
+uint8_t val;
 
 void main(void)
 {
@@ -30,7 +32,9 @@ void main(void)
     pal_all(palette); //set palette for sprites
     oam_size(1);
 
-    vram_puts(10, 10, "Hello World!");
+    vram_puts(10, 3, "Hello World!");
+    vram_puts(9, 20, "Goodbye World!");
+    set_split(120);
 
     ppu_on_all();
     for(framenum=0;;++framenum) {
@@ -38,5 +42,7 @@ void main(void)
         oam_clear();
         player_pad_changed = pad_trigger(0);
         player_pad = pad_state(0);
+        scroll0(-framenum*2, 0);
+        scroll1(0, 120);
     }
 }

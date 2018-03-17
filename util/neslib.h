@@ -117,7 +117,9 @@ unsigned char __fastcall__ pad_state(unsigned char pad);
 
 //set scroll, including top bits
 
-void __fastcall__ scroll(unsigned int x,unsigned int y);
+void __fastcall__ set_split(unsigned char ypos);
+void __fastcall__ scroll0(unsigned int x,unsigned int y);
+void __fastcall__ scroll1(unsigned int x,unsigned int y);
 
 
 

@@ -54,8 +54,8 @@ PAD_STATE	=$04	;2 bytes, one per controller
 PAD_STATEP	=$06	;2 bytes
 PAD_STATET	=$08	;2 bytes
 FT_TEMP		=$0a	;7 bytes in zeropage
-SCROLL_X	=$11
-SCROLL_Y	=$12
+SCROLL_X0	=$11
+SCROLL_Y0	=$12
 PPU_CTRL_VAR=$13
 PPU_MASK_VAR=$14
 NAME_UPD_ADR=$15	;word
@@ -64,11 +64,12 @@ PAL_PTR		=$18	;word
 RAND_SEED	=$1a	;word
 PALUPDATE	=$1c
 
-SCROLL_NT   =$1d
-SCROLL_ADDR =$1e
-SCROLL_EN   =$1f
+SCROLL_X1	=$1d
+SCROLL_Y1	=$1e
+SCROLL_NT   =$1f
+SCROLL_ADDR =$20
 
-TEMP		=$20
+TEMP		=$22
 
 PAD_BUF		=TEMP+1
 
@@ -116,7 +117,6 @@ _exit:
     stx PPU_MASK
     stx DMC_FREQ
     stx PPU_CTRL		;no NMI
-    stx SCROLL_EN
 
     lda #$41
     sta $4018
@@ -247,15 +247,15 @@ detectNTSC:
     cli
 	jmp _main			;no parameters
 
-	.include "neslib.s"
+	.include "neslib.S"
 
 .segment "RODATA"
 
-	.include "music.s"
+	.include "music.S"
 
 	.if(FT_SFX_ENABLE)
 sounds_data:
-	.include "sounds.s"
+	.include "sounds.S"
 	.endif
 
 .segment "SAMPLES"

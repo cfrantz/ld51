@@ -1,0 +1,6 @@
+*.nes
+*.map
+*.o
+*.a
+*.s
+fceux
