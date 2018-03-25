@@ -31,6 +31,9 @@ nmi:
 	tya
 	pha
 
+    lda #2
+    sta $f001
+
 	lda <VRAMUPDATE
 	bne @upd
 	jmp @skipUpd
@@ -120,7 +123,7 @@ nmi:
     sta PPU_CTRL
 
 	inc <FRAMECNT1
-	jsr FamiToneUpdate
+	;jsr FamiToneUpdate
 
 @nmiexit:
 	pla
@@ -136,10 +139,6 @@ irq:
 	pha
 	tya
 	pha
-    ; ack the irq
-    lda $5204
-;    and #$80
-;    beq @irqexit
 
     lda $2002           ;reset the ppu toggle
     ; Order of writes from "Split X/Y scroll" section on
@@ -151,7 +150,7 @@ irq:
 	lda <SCROLL_X1
     ldy <SCROLL_ADDR
 
-    ldx #7
+    ldx #24
 @hline_delay:
     dex
     bne @hline_delay
@@ -159,9 +158,12 @@ irq:
 	sta PPU_SCROLL
     sty PPU_ADDR
 
+    ; ack the irq
+
     inc FRAMECNT2
 
 @irqexit:
+    sta $f002
     pla
     tay
     pla
@@ -536,12 +538,18 @@ _unrle_vram:
 ;void __fastcall__ set_split(unsigned char ypos);
 
 _set_split:
-    sta $5203
     cmp #0
     beq @1
-    lda #$80
+    ; There are 21 scanlines in v-blank
+    clc
+    adc #20
+    eor #$ff
+    adc #1
+    sta $f000
+    ; scanline mode b2=0, enabled b1=1, don't enable after ack b0=0
+    lda #2
 @1:
-    sta $5204
+    sta $f001
     rts
 
 ;void __fastcall__ scroll0(unsigned int x,unsigned int y);

@@ -2,7 +2,7 @@
 ; based on code by Groepaz/Hitmen <groepaz@gmx.net>, Ullrich von Bassewitz <uz@cc65.org>
 
 
-NES_MAPPER				=5	;mapper number
+NES_MAPPER				=24	;mapper number (VRC6)
 NES_PRG_BANKS			=2	;number of 16K PRG banks, change to 2 for NROM256
 NES_CHR_BANKS			=1	;number of 8K CHR banks
 NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
@@ -99,7 +99,7 @@ FT_DPCM_PTR		=(FT_DPCM_OFF&$3fff)>>6
     .byte $4e,$45,$53,$1a
 	.byte NES_PRG_BANKS
 	.byte NES_CHR_BANKS
-	.byte NES_MIRRORING|(NES_MAPPER<<4)
+	.byte NES_MIRRORING|((NES_MAPPER & $0f)<<4)
 	.byte NES_MAPPER&$f0
 	.res 8,0
 
@@ -262,9 +262,9 @@ sounds_data:
 
 	;.incbin "music_dpcm.bin"
 
-.segment "MMC5BOOT"
+.segment "VRC6BOOT"
 
-mmc5boot:
+vrc6boot:
     sei
     ldx #$ff
     txs
@@ -273,19 +273,43 @@ mmc5boot:
     stx DMC_FREQ
     stx PPU_CTRL		;no NMI
 
-    ; Configure mmc5 for a single 32kb PRG bank
-    stx $5100
-    ; Configure mmc5 for a single 8kb CHR bank
-    stx $5101
-    ; Configure mmc5 for vertical mirroring
-    ldx #$44
-    stx $5105
+    ; Tell VRC6 we want WRAM and vertical mirroring
+    ldx #$A0
+    stx $B003
+
+
+    ; Set 8k bank at $c000 to $dfff to -2
+    ldx #$fe
+    stx $c000
+    ; Set 16k bank at $8000-$bfff to 0
+    ldx #0
+    stx $8000
+
+    ; Set up the 1k chr banks as the first 8 banks
+    ldx #0
+    stx $D000
+    ldx #1
+    stx $D001
+    ldx #2
+    stx $D002
+    ldx #3
+    stx $D003
+
+    ldx #4
+    stx $E000
+    ldx #5
+    stx $E001
+    ldx #6
+    stx $E002
+    ldx #7
+    stx $E003
+
     jmp start
 
 .segment "VECTORS"
 
     .word nmi	;$fffa vblank nmi
-    .word mmc5boot	;$fffc reset
+    .word vrc6boot	;$fffc reset
    	.word irq	;$fffe irq / brk
 
 

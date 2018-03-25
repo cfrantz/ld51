@@ -23,26 +23,57 @@ uint8_t player_pad;
 uint8_t player_pad_changed;
 uint8_t pad;
 uint8_t val;
+uint8_t spridx;
+
+const char kBars[] = "||||||||||||||||||||||||||||||||";
+const char kHex[] = "0123456789ABCDEF";
+
+void dobrk(void) {
+    asm("brk");
+    asm("nop");
+}
 
 void main(void)
 {
     bank_bg(0);
-    bank_spr(1);
+    bank_spr(0);
     ppu_off();
     pal_all(palette); //set palette for sprites
-    oam_size(1);
+    oam_size(0);
 
     vram_puts(10, 3, "Hello World!");
+    vram_puts(0, 12, kBars);
+    vram_puts(0, 13, kBars);
     vram_puts(9, 20, "Goodbye World!");
-    set_split(120);
+
+    vram_puts(10,32+4, "Hello Screen2");
+    vram_puts(0, 32+12, kBars);
+    vram_puts(0, 32+13, kBars);
+    vram_puts(9, 32+21, "Goodbye Screen2");
+    for(val=0; val<32; ++val) {
+        vram_adr(0x2000 + val*32);
+        vram_put(kHex[val>>4]);
+        vram_put(kHex[val&15]);
+    }
 
     ppu_on_all();
+    set_split(13*8-1);
+
     for(framenum=0;;++framenum) {
         ppu_waitnmi();
         oam_clear();
+        spridx = 0;
+        val = readreg8(0);
+        spridx = oam_spr(8, 32, kHex[val>>4], 3, spridx);
+        spridx = oam_spr(16, 32, kHex[val&15], 3, spridx);
+
+        val = readreg8(1);
+        spridx = oam_spr(8, 40, kHex[val>>4], 3, spridx);
+        spridx = oam_spr(16, 40, kHex[val&15], 3, spridx);
+
         player_pad_changed = pad_trigger(0);
         player_pad = pad_state(0);
-        scroll0(-framenum*2, 0);
-        scroll1(0, 120);
+        scroll0(-framenum, 0);
+        scroll1(framenum, 13*8);
     }
 }
