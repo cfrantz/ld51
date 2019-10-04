@@ -24,10 +24,16 @@ uint8_t player_pad_changed;
 uint8_t pad;
 uint8_t val;
 uint8_t spridx;
+uint8_t x, y;
 
-extern mmc3_reg(uint8_t reg, uint8_t val);
-const char kBars[] = "||||||||||||||||||||||||||||||||";
 const char kHex[] = "0123456789ABCDEF";
+
+const char kScreen1[] = "11111111111111111111111111111111";
+const char kScreen2[] = "22222222222222222222222222222222";
+const char kScreen3[] = "33333333333333333333333333333333";
+const char kScreen4[] = "44444444444444444444444444444444";
+const char kHud0[] =    "+------------------------------+";
+const char kHud1[] =    "|                              |";
 
 void dobrk(void) {
     asm("brk");
@@ -36,38 +42,31 @@ void dobrk(void) {
 
 void main(void)
 {
-    // CHR bank 0
-    mmc3_reg(0, 0);
-    mmc3_reg(1, 2);
-    // CHR bank 1
-    mmc3_reg(2, 0);
-    mmc3_reg(3, 1);
-    mmc3_reg(4, 2);
-    mmc3_reg(5, 3);
-
-    bank_bg(1);
+    bank_bg(0);
     bank_spr(0);
     ppu_off();
     pal_all(palette); //set palette for sprites
     oam_size(0);
 
-    vram_puts(10, 3, "Hello World!");
-    vram_puts(0, 12, kBars);
-    vram_puts(0, 13, kBars);
-    vram_puts(9, 20, "Goodbye World!");
-
-    vram_puts(10,32+4, "Hello Screen2");
-    vram_puts(0, 32+12, kBars);
-    vram_puts(0, 32+13, kBars);
-    vram_puts(9, 32+21, "Goodbye Screen2");
-    for(val=0; val<32; ++val) {
-        vram_adr(0x2000 + val*32);
-        vram_put(kHex[val>>4]);
-        vram_put(kHex[val&15]);
+    for(val=0; val<30; ++val) {
+        vram_puts(0, (32*0)+val, kScreen1);
+        vram_puts(0, (32*1)+val, kScreen2);
+        vram_puts(0, (32*2)+val, kScreen3);
+        vram_puts(0, (32*3)+val, kScreen4);
+//        vram_puts(32, val, kScreen2);
+//        vram_puts(0, val+30, kScreen3);
+//        vram_puts(32, val+30, kScreen4);
     }
 
-    set_split(13*8-1);
+    vram_puts(0, 32*2+25, kHud0);
+    vram_puts(0, 32*2+26, kHud1);
+    vram_puts(0, 32*2+27, kHud1);
+    vram_puts(0, 32*2+28, kHud1);
+    vram_puts(0, 32*2+29, kHud0);
+    vram_puts(5, 32*2+27, "Health & Stuff");
+
     ppu_on_all();
+    set_split(25*8);
 
     for(framenum=0;;++framenum) {
         ppu_waitnmi();
@@ -83,7 +82,12 @@ void main(void)
 
         player_pad_changed = pad_trigger(0);
         player_pad = pad_state(0);
-        scroll0(-framenum, 0);
-        scroll1(framenum, 13*8);
+        if (player_pad & PAD_LEFT) --x;
+        if (player_pad & PAD_RIGHT) ++x;
+        if (player_pad & PAD_UP) --y;
+        if (player_pad & PAD_DOWN) ++y;
+
+        scroll0(x, y);
+        scroll1(0, 240+25*8);
     }
 }
