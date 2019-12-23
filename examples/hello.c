@@ -69,6 +69,7 @@ void main(void)
     set_split(13*8-1);
     ppu_on_all();
 
+    music_play(0);
     for(framenum=0;;++framenum) {
         ppu_waitnmi();
         oam_clear();

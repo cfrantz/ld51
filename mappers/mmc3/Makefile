@@ -10,7 +10,7 @@ ASMS=$(SRCS:.c=.s)
 libinit.a: $(OBJS)
 	$(AR) r $@ $(OBJS)
 
-crt0.o: crt0.S famitone.S music.S neslib.S sounds.S
+crt0.o: crt0.S famitone2.S music.S neslib.S sounds.S
 	$(AS) $<
 
 %.o: %.c

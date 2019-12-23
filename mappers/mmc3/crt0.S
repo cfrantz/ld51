@@ -7,11 +7,6 @@ NES_PRG_BANKS			=2	;number of 16K PRG banks, change to 2 for NROM256
 NES_CHR_BANKS			=1	;number of 8K CHR banks
 NES_MIRRORING			=8	;0 horizontal, 1 vertical, 8 four screen
 
-FT_DPCM_OFF				=$ffc0	;samples offset, $c000 or higher, 64-byte steps
-FT_SFX_STREAMS			=4	;number of sound effects played at once, can be 4 or less (faster)
-
-.define FT_DPCM_ENABLE 	0	;zero to exclude all the DMC code
-.define FT_SFX_ENABLE  	1	;zero to exclude all the sound effects code
 
 .define SPEED_FIX		0	;zero if you want to handle PAL/NTSC speed difference by yourself
 
@@ -19,6 +14,7 @@ FT_SFX_STREAMS			=4	;number of sound effects played at once, can be 4 or less (f
     .export _exit,__STARTUP__:absolute=1
     .export _mmc3_reg
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
+    .import default_music_data
 
 ; Linker generated symbols
 	.import __RAM_START__   ,__RAM_SIZE__
@@ -54,7 +50,7 @@ VRAMUPDATE	=$03
 PAD_STATE	=$04	;2 bytes, one per controller
 PAD_STATEP	=$06	;2 bytes
 PAD_STATET	=$08	;2 bytes
-FT_TEMP		=$0a	;7 bytes in zeropage
+;FT_TEMP		=$0a	;7 bytes in zeropage
 SCROLL_X0	=$11
 SCROLL_Y0	=$12
 PPU_CTRL_VAR=$13
@@ -88,8 +84,8 @@ RLE_TAG		=TEMP+2
 RLE_BYTE	=TEMP+3
 
 
-FT_BASE_ADR		=$0100	;page in RAM, should be $xx00
-FT_DPCM_PTR		=(FT_DPCM_OFF&$3fff)>>6
+;FT_BASE_ADR		=$0100	;page in RAM, should be $xx00
+;FT_DPCM_PTR		=(FT_DPCM_OFF&$3fff)>>6
 
 .define FT_THREAD      1;undefine if you call sound effects in the same thread as sound update
 
@@ -217,19 +213,21 @@ detectNTSC:
 	jsr _ppu_off
 
 	lda <NTSCMODE
+	ldx #<default_music_data
+	ldy #>default_music_data
 	jsr FamiToneInit
 
-	.if(FT_DPCM_ENABLE)
-	ldx #<music_dpcm
-	ldy #>music_dpcm
-	jsr FamiToneSampleInit
-	.endif
-
-	.if(FT_SFX_ENABLE)
-	ldx #<sounds_data
-	ldy #>sounds_data
-	jsr FamiToneSfxInit
-	.endif
+;	.if(FT_DPCM_ENABLE)
+;	ldx #<music_dpcm
+;	ldy #>music_dpcm
+;	jsr FamiToneSampleInit
+;	.endif
+;
+;	.if(FT_SFX_ENABLE)
+;	ldx #<sounds_data
+;	ldy #>sounds_data
+;	jsr FamiToneSfxInit
+;	.endif
 
 	.if(!SPEED_FIX)
 	lda #0

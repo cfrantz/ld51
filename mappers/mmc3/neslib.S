@@ -20,6 +20,7 @@
 	.export _vram_adr,_vram_put,_vram_fill,_vram_inc
 	.export _memcpy,_memfill,_delay
     .import _ppu_macro_len, _ppu_macro
+    .export FT_TEMP, FT_BASE_ADR
 
 
 ;NMI handler
@@ -750,10 +751,10 @@ _vram_write:
 ;void __fastcall__ music_play(const unsigned char *data);
 
 _music_play:
-	stx <PTR
-	tax
-	ldy <PTR
-	jmp FamiToneMusicStart
+;	stx <PTR
+;	tax
+;	ldy <PTR
+	jmp FamiToneMusicPlay
 
 
 
@@ -777,7 +778,7 @@ _sfx_play:
 	lda @sfxPriority,x
 	tax
 	jsr popa
-	jmp FamiToneSfxStart
+	jmp FamiToneSfxPlay
 
 @sfxPriority:
 	.byte FT_SFX_CH0,FT_SFX_CH1,FT_SFX_CH2,FT_SFX_CH3
@@ -1099,4 +1100,22 @@ palBrightTable:
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 
-.include "famitone.S"
+FT_DPCM_OFF				=$ffc0	;samples offset, $c000 or higher, 64-byte steps
+FT_SFX_STREAMS			=4	;number of sound effects played at once, can be 4 or less (faster)
+
+.define FT_DPCM_ENABLE 	1	;zero to exclude all the DMC code
+.define FT_SFX_ENABLE  	1	;zero to exclude all the sound effects code
+FT_PAL_SUPPORT  = 0
+FT_NTSC_SUPPORT = 1
+FT_PITCH_FIX = 0
+
+.segment "CODE"
+.include "famitone2.S"
+
+;.segment "ZEROPAGE"
+;FT_TEMP:		.res FT_TEMP_SIZE
+FT_TEMP		=$0a	;7 bytes in zeropage
+
+.segment "FAMITONE"
+FT_BASE_ADR:	.res FT_BASE_SIZE
+
