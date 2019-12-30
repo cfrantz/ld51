@@ -120,7 +120,7 @@ nmi:
     sta PPU_CTRL
 
 	inc <FRAMECNT1
-	jsr FamiToneUpdate
+	;jsr FamiToneUpdate
 
 @nmiexit:
 	pla

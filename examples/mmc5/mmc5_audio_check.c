@@ -107,6 +107,7 @@ uint8_t pad;
 uint8_t val;
 
 uint8_t notes[5];
+uint8_t noteon[5];
 uint8_t note_num;
 
 // supply an empty FamiToneUpdate, overiding the routine in famitone.s.
@@ -132,6 +133,12 @@ void main(void)
     notes[2] = 15 + 4;
     notes[3] = 15 + 7;
     notes[4] = 15 + 12;
+
+    noteon[0] = 1;
+    noteon[1] = 1;
+    noteon[2] = 1;
+    noteon[3] = 1;
+    noteon[4] = 1;
 
     for(val=0; val<5; ++val) {
         apu_play(val, notes[val], 2);
@@ -165,19 +172,30 @@ void main(void)
         ppu_macro_byte('^');
 
         // If up/down was pressed, change the note being played.
-        if (pad & (PAD_UP | PAD_DOWN)) {
+        if (pad & (PAD_UP | PAD_DOWN | PAD_A)) {
             if (pad & PAD_UP) {
                 ++notes[note_num];
             } else if (pad & PAD_DOWN) {
                 --notes[note_num];
+            } else if (pad & PAD_A) {
+                noteon[note_num] = !noteon[note_num];
             }
 
-            apu_play(note_num, notes[note_num], 2);
+            apu_play(note_num,
+                     noteon[note_num] ?  notes[note_num] : 0xFF,
+                     2);
+
             ppu_macro_word(0x2000 + 15*32 + note_num*4);
             ppu_macro_byte(3);
-            ppu_macro_byte(note_names[notes[note_num]][0]);
-            ppu_macro_byte(note_names[notes[note_num]][1]);
-            ppu_macro_byte(note_names[notes[note_num]][2]);
+            if (noteon[note_num]) {
+                ppu_macro_byte(note_names[notes[note_num]][0]);
+                ppu_macro_byte(note_names[notes[note_num]][1]);
+                ppu_macro_byte(note_names[notes[note_num]][2]);
+            } else {
+                ppu_macro_byte('-');
+                ppu_macro_byte('-');
+                ppu_macro_byte('-');
+            }
         }
 
     }

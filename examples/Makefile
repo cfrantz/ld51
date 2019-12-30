@@ -17,13 +17,6 @@ hello.nes: hello.o hello_music.o $(OBJS)
 		../util/libutil.a \
 		$(NESLIB)
 
-mmc5_audio_check.nes: mmc5_audio_check.o $(OBJS)
-	ld65 -C ../mappers/mmc5/nes.cfg -vm --mapfile mmc5_audio_check.map -o $@ \
-		mmc5_audio_check.o $(OBJS) \
-		../mappers/mmc5/libinit.a \
-		../util/libutil.a \
-		$(NESLIB)
-
 vrc6_audio_check.nes: vrc6_audio_check.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile vrc6_audio_check.map -o $@ \
 		vrc6_audio_check.o $(OBJS) \
