@@ -14,7 +14,6 @@ NES_MIRRORING			=8	;0 horizontal, 1 vertical, 8 four screen
     .export _exit,__STARTUP__:absolute=1
     .export _mmc3_reg
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
-    .import default_music_data
 
 ; Linker generated symbols
 	.import __RAM_START__   ,__RAM_SIZE__
@@ -24,72 +23,8 @@ NES_MIRRORING			=8	;0 horizontal, 1 vertical, 8 four screen
 	.import	__RODATA_LOAD__ ,__RODATA_RUN__ ,__RODATA_SIZE__
 
     .include "zeropage.inc"
-
-
-PPU_CTRL	=$2000
-PPU_MASK	=$2001
-PPU_STATUS	=$2002
-PPU_OAM_ADDR=$2003
-PPU_OAM_DATA=$2004
-PPU_SCROLL	=$2005
-PPU_ADDR	=$2006
-PPU_DATA	=$2007
-PPU_OAM_DMA	=$4014
-PPU_FRAMECNT=$4017
-DMC_FREQ	=$4010
-CTRL_PORT1	=$4016
-CTRL_PORT2	=$4017
-
-OAM_BUF		=$0200
-PAL_BUF		=$01c0
-
-FRAMECNT1	=$00
-FRAMECNT2	=$01
-NTSCMODE	=$02
-VRAMUPDATE	=$03
-PAD_STATE	=$04	;2 bytes, one per controller
-PAD_STATEP	=$06	;2 bytes
-PAD_STATET	=$08	;2 bytes
-;FT_TEMP		=$0a	;7 bytes in zeropage
-SCROLL_X0	=$11
-SCROLL_Y0	=$12
-PPU_CTRL_VAR=$13
-PPU_MASK_VAR=$14
-NAME_UPD_ADR=$15	;word
-NAME_UPD_LEN=$17
-PAL_PTR		=$18	;word
-RAND_SEED	=$1a	;word
-PALUPDATE	=$1c
-
-SCROLL_X1	=$1d
-SCROLL_Y1	=$1e
-SCROLL_NT   =$1f
-SCROLL_ADDR =$20
-
-TEMP		=$22
-
-PAD_BUF		=TEMP+1
-
-PTR			=TEMP	;word
-LEN			=TEMP+2	;word
-NEXTSPR		=TEMP+4
-SCRX		=TEMP+5
-SCRY		=TEMP+6
-SRC			=TEMP+7	;word
-DST			=TEMP+9	;word
-
-RLE_LOW		=TEMP
-RLE_HIGH	=TEMP+1
-RLE_TAG		=TEMP+2
-RLE_BYTE	=TEMP+3
-
-
-;FT_BASE_ADR		=$0100	;page in RAM, should be $xx00
-;FT_DPCM_PTR		=(FT_DPCM_OFF&$3fff)>>6
-
-.define FT_THREAD      1;undefine if you call sound effects in the same thread as sound update
-
-
+    .include "neslib/globals.inc"
+    .include "neslib/nes.inc"
 
 .segment "HEADER"
 
@@ -165,9 +100,9 @@ clearRAM:
     bne @1
 
 	lda #4
-	jsr _pal_bright
-	jsr _pal_clear
-	jsr _oam_clear
+	;jsr _pal_bright
+	;jsr _pal_clear
+	;jsr _oam_clear
 
     jsr	zerobss
 	jsr	copydata
@@ -186,57 +121,20 @@ waitSync2:
     bpl @1
 
 	lda #%10000000
-	sta <PPU_CTRL_VAR
+	sta ppu_ctrl_var
 	sta PPU_CTRL		;enable NMI
 	lda #%00000110
-	sta <PPU_MASK_VAR
+	sta ppu_mask_var
 
 waitSync3:
-	lda <FRAMECNT1
+	lda _frame_count
 @1:
-	cmp <FRAMECNT1
+	cmp _frame_count
 	beq @1
 
-detectNTSC:
-	ldx #52				;blargg's code
-	ldy #24
-@1:
-	dex
-	bne @1
-	dey
-	bne @1
-
-	lda PPU_STATUS
-	and #$80
-	sta <NTSCMODE
-
-	jsr _ppu_off
-
-	lda <NTSCMODE
-	ldx #<default_music_data
-	ldy #>default_music_data
-	jsr FamiToneInit
-
-;	.if(FT_DPCM_ENABLE)
-;	ldx #<music_dpcm
-;	ldy #>music_dpcm
-;	jsr FamiToneSampleInit
-;	.endif
-;
-;	.if(FT_SFX_ENABLE)
-;	ldx #<sounds_data
-;	ldy #>sounds_data
-;	jsr FamiToneSfxInit
-;	.endif
-
-	.if(!SPEED_FIX)
-	lda #0
-	sta <NTSCMODE
-	.endif
-
 	lda #$fd
-	sta <RAND_SEED
-	sta <RAND_SEED+1
+	sta rand_seed
+	sta rand_seed+1
 
 	lda #0
 	sta PPU_SCROLL
@@ -246,22 +144,155 @@ detectNTSC:
     cli
 	jmp _main			;no parameters
 
-	.include "neslib.S"
-
-.segment "RODATA"
-
-	.include "music.S"
-
-	.if(FT_SFX_ENABLE)
-sounds_data:
-	.include "sounds.S"
-	.endif
-
-.segment "SAMPLES"
-
-	;.incbin "music_dpcm.bin"
-
 .segment "MMC3BOOT"
+
+;NMI handler
+nmi:
+	pha
+	txa
+	pha
+	tya
+	pha
+
+@oam_update:
+	ldx #$00
+	stx PPU_OAM_ADDR
+	lda #>OAM_BUF
+	sta PPU_OAM_DMA
+
+	lda pal_update
+    bne @palette_update
+    jmp @exec_ppu_macro
+
+@palette_update:
+	lda #$3f
+	sta PPU_ADDR
+	stx PPU_ADDR
+	stx pal_update
+
+	.repeat 4,I
+	ldy pal_buf+I
+	lda (pal_ptr),y
+	sta PPU_DATA
+	.endrepeat
+
+	.repeat 7,J
+	lda PPU_DATA			;skip background color
+	.repeat 3,I
+	ldy pal_buf+5+(J*4)+I
+	lda (pal_ptr),y
+	sta PPU_DATA
+	.endrepeat
+	.endrepeat
+
+@exec_ppu_macro:
+
+	ldx _ppu_macro_len
+	beq @updates_done
+	ldy #0
+@updName:
+	lda _ppu_macro,y
+    iny
+    sta PPU_ADDR
+	lda _ppu_macro,y
+    iny
+    sta PPU_ADDR
+
+	lda _ppu_macro,y
+    and #$80
+    bne @updVert
+	lda ppu_ctrl_var
+    and #$fb
+    bne @updDir
+@updVert:
+	lda ppu_ctrl_var
+    ora #$04
+@updDir:
+    sta PPU_CTRL
+	lda _ppu_macro,y
+    iny
+    and #$7f
+    tax
+
+@updPPU:
+	lda _ppu_macro,y
+    iny
+	sta PPU_DATA
+	dex
+	bne @updPPU
+    
+    cpy _ppu_macro_len
+    bne @updName
+	ldy #0
+    sty _ppu_macro_len
+
+@updates_done:
+	stx PPU_ADDR
+	stx PPU_ADDR
+
+    ; Set the region0 scroll registers
+    lda scroll_x0
+    sta PPU_SCROLL
+    lda scroll_y0
+    sta PPU_SCROLL
+    lda ppu_ctrl_var
+    sta PPU_CTRL
+
+    ; Enable the irq counter
+    sta $c001
+    sta $e001
+
+	inc _frame_count
+    bcc @framecount_done
+	inc _frame_count+1
+@framecount_done:
+
+@nmiexit:
+	pla
+	tay
+	pla
+	tax
+	pla
+    rti
+
+irq:
+    pha
+	txa
+	pha
+	tya
+	pha
+    ; ack the irq
+    sta $e000
+
+    ldx #13
+@hline_delay:
+    dex
+    bne @hline_delay
+
+    lda $2002           ;reset the ppu toggle
+    ; Order of writes from "Split X/Y scroll" section on
+    ; https://wiki.nesdev.com/w/index.php/PPU_scrolling
+	lda scroll_nt
+	sta PPU_ADDR
+	lda scroll_y1
+	sta PPU_SCROLL
+	lda scroll_x1
+    ldy scroll_addr
+
+;    ldx #7
+;@hline_delay:
+;    dex
+;    bne @hline_delay
+
+	sta PPU_SCROLL
+    sty PPU_ADDR
+@irqexit:
+    pla
+    tay
+    pla
+    tax
+    pla
+    rti
 
 ;void __fastcall__ mmc3_reg(uint8_t reg, uint8_t val)
 _mmc3_reg:
@@ -323,6 +354,3 @@ mmc3boot:
     .word nmi	;$fffa vblank nmi
     .word mmc3boot	;$fffc reset
    	.word irq	;$fffe irq / brk
-
-
-.segment "CHARS"

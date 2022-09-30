@@ -1,0 +1,12 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "globals",
+    hdrs = [
+        "globals.inc",
+        "nes.inc",
+    ],
+    srcs = ["globals.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+)
+

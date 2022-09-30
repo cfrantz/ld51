@@ -16,7 +16,7 @@ MEMORY {
     # PRG: start = $8000, size = $3f00, file = %O ,fill = yes, define = yes;
 
     # NROM256
-    PRG: start = $8000, size = $7f00, file = %O ,fill = yes, define = yes;
+    PRG: start = $8000, size = $7d00, file = %O ,fill = yes, define = yes;
 
     # DPCM Samples at end of the ROM
 
@@ -26,11 +26,7 @@ MEMORY {
     DMC: start = $ff00, size = $80, file = %O, fill = yes;
 
     # Hardware Vectors at end of the ROM
-
-    # VECTORS: start = $7ffa, size = $6, file = %O, fill = yes;
-    MMC3BOOT: start = $ff80, size = $7a, file = %O, fill = yes;
-
-    # NROM256
+    MMC3BOOT: start = $fd80, size = $27a, file = %O, fill = yes;
     VECTORS: start = $fffa, size = $6, file = %O, fill = yes;
 
     # 1 8K CHR Bank
@@ -58,9 +54,9 @@ SEGMENTS {
     CODE:     load = PRG,            type = ro,  define = yes;
     RODATA:   load = PRG,            type = ro,  define = yes;
     DATA:     load = PRG, run = RAM, type = rw,  define = yes;
-    MMC3BOOT: load = MMC3BOOT,       type = rw;
-    VECTORS:  load = VECTORS,        type = rw;
-    SAMPLES:  load = DMC,            type = rw;
+    MMC3BOOT: load = MMC3BOOT,       type = ro,  define = yes;
+    VECTORS:  load = VECTORS,        type = ro,  define = yes;
+#    SAMPLES:  load = DMC,            type = rw;
     CHARS:    load = CHR,            type = rw;
     FAMITONE: load = FAMITONE,       type = bss, define = yes;
     BSS:      load = RAM,            type = bss, define = yes;

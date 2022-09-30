@@ -1,0 +1,10 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "palette",
+    srcs = ["palette.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+    ],
+)

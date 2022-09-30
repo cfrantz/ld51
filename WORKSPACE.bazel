@@ -1,0 +1,13 @@
+workspace(name = "com_github_emptynes")
+
+load("//third_party/crt:repos.bzl", "crt_repos")
+crt_repos(local = "../cross_compile/crt")
+load("@crt//:repos.bzl", "crt_repos")
+crt_repos()
+load("@crt//:deps.bzl", "crt_deps")
+crt_deps()
+
+load("@crt//config:registration.bzl", "crt_register_toolchains")
+crt_register_toolchains(
+    m6502 = True,
+)

@@ -1,0 +1,16 @@
+package(default_visibility = ["//visibility:public"])
+load("@crt//rules:transition.bzl", "platform_target")
+
+cc_binary(
+    name = "empty",
+    srcs = ["empty.c"],
+    deps = [
+        "//mappers/mmc3",
+    ],
+)
+
+platform_target(
+    name = "empty_nes",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+    target = ":empty",
+)

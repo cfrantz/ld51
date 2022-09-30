@@ -1,0 +1,15 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "mmc3",
+    srcs = ["crt0.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    linkopts = [
+        "-C", "$(location :mmc3.ld)",
+    ],
+    deps = [
+        "mmc3.ld",
+        "//neslib:globals",
+    ],
+
+)

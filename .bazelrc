@@ -1,0 +1,6 @@
+# Enable toolchain resolution cc
+build --incompatible_enable_cc_toolchain_resolution
+
+# Add a convenient shortcut for building NES code:
+# bazel build --config=nes <target>
+build:nes --platforms=@crt//platforms/m6502:nintendo-nes
