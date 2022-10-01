@@ -1,0 +1,19 @@
+package(default_visibility = ["//visibility:public"])
+load("@crt//rules:transition.bzl", "platform_target")
+
+cc_binary(
+    name = "test_random_nes",
+    srcs = ["test_random.c"],
+    deps = [
+        "//mappers/mmc3",
+        "//neslib/ppu",
+        "//neslib/util:debug",
+        "//neslib/util:random",
+    ],
+)
+
+platform_target(
+    name = "test_random",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+    target = ":test_random_nes",
+)

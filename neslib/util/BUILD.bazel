@@ -10,6 +10,17 @@ cc_library(
 )
 
 cc_library(
+    name = "random",
+    hdrs = [ "random.h" ],
+    srcs = ["random.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+        "//util:compiler",
+    ],
+)
+
+cc_library(
     name = "registers",
     hdrs = [ "registers.h" ],
 )
