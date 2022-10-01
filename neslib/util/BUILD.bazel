@@ -1,0 +1,25 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "bcd",
+    hdrs = [ "bcd.h" ],
+    srcs = ["bcd.c"],
+    deps = [
+        "//util:compiler",
+    ],
+)
+
+cc_library(
+    name = "registers",
+    hdrs = [ "registers.h" ],
+)
+
+cc_library(
+    name = "debug",
+    hdrs = [ "debug.h" ],
+    srcs = ["debug.c"],
+    deps = [
+        ":registers",
+        "//util:compiler",
+    ],
+)
