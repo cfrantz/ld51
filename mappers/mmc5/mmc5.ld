@@ -16,7 +16,7 @@ MEMORY {
     # PRG: start = $8000, size = $3f00, file = %O ,fill = yes, define = yes;
 
     # NROM256
-    PRG: start = $8000, size = $7f00, file = %O ,fill = yes, define = yes;
+    PRG: start = $8000, size = $7d00, file = %O ,fill = yes, define = yes;
 
     # DPCM Samples at end of the ROM
 
@@ -26,11 +26,7 @@ MEMORY {
     DMC: start = $ff00, size = $80, file = %O, fill = yes;
 
     # Hardware Vectors at end of the ROM
-
-    # VECTORS: start = $7ffa, size = $6, file = %O, fill = yes;
-    MMC5BOOT: start = $ff80, size = $7a, file = %O, fill = yes;
-
-    # NROM256
+    MMC5BOOT: start = $fd80, size = $27a, file = %O, fill = yes;
     VECTORS: start = $fffa, size = $6, file = %O, fill = yes;
 
     # 1 8K CHR Bank
@@ -41,11 +37,12 @@ MEMORY {
     # $0100 famitone, palette, cpu stack
     # $0200 oam buffer
     # $0300..$800 ca65 stack
+    FAMITONE: start = $100, size = $100, define = yes;
 
-    RAM: start = $0300, size = $0500, define = yes;
+    #RAM: start = $0300, size = $0500, define = yes;
 
     # Use this definition instead if you going to use extra 8K RAM
-    # RAM: start = $6000, size = $2000, define = yes;
+    RAM: start = $6000, size = $2000, define = yes;
 }
 
 SEGMENTS {
@@ -57,10 +54,11 @@ SEGMENTS {
     CODE:     load = PRG,            type = ro,  define = yes;
     RODATA:   load = PRG,            type = ro,  define = yes;
     DATA:     load = PRG, run = RAM, type = rw,  define = yes;
-    MMC5BOOT: load = MMC5BOOT,       type = rw;
-    VECTORS:  load = VECTORS,        type = rw;
-    SAMPLES:  load = DMC,            type = rw;
+    MMC5BOOT: load = MMC5BOOT,       type = ro,  define = yes;
+    VECTORS:  load = VECTORS,        type = ro,  define = yes;
+#    SAMPLES:  load = DMC,            type = rw;
     CHARS:    load = CHR,            type = rw;
+    FAMITONE: load = FAMITONE,       type = bss, define = yes;
     BSS:      load = RAM,            type = bss, define = yes;
     HEAP:     load = RAM,            type = bss, optional = yes;
     ZEROPAGE: load = ZP,             type = zp;

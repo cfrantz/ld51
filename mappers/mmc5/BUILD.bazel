@@ -1,0 +1,17 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "mmc5",
+    hdrs = ["mmc5.h"],
+    srcs = ["crt0.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    linkopts = [
+        "-C", "$(location :mmc5.ld)",
+    ],
+    deps = [
+        "mmc5.ld",
+        "//neslib:globals",
+        "//util:compiler",
+    ],
+
+)

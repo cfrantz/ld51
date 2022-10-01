@@ -2,7 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef MAPPER_MMC3
 #include "mappers/mmc3/mmc3.h"
+#endif
+#ifdef MAPPER_MMC5
+#include "mappers/mmc5/mmc5.h"
+#endif
+
 #include "neslib/globals.h"
 #include "neslib/ppu/ppu.h"
 #include "neslib/controller/controller.h"
@@ -35,6 +41,7 @@ uint8_t val;
 uint8_t x, y, color;
 
 void main(void) {
+#ifdef MAPPER_MMC3
     // CHR bank 0
     mmc3_reg(0, 0);
     mmc3_reg(1, 2);
@@ -43,6 +50,7 @@ void main(void) {
     mmc3_reg(3, 1);
     mmc3_reg(4, 2);
     mmc3_reg(5, 3);
+#endif
 
     bank_bg(0);
     bank_spr(1);
@@ -59,6 +67,7 @@ void main(void) {
     vram_puts(0, 32 + 12, kBars);
     vram_puts(0, 32 + 13, kBars);
     vram_puts(9, 32 + 21, "Goodbye Screen2");
+
     for (val = 0; val < 32; ++val) {
         vram_adr(0x2000 + val * 32);
         vram_put(kHex[val >> 4]);

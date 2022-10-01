@@ -2,8 +2,9 @@ package(default_visibility = ["//visibility:public"])
 load("@crt//rules:transition.bzl", "platform_target")
 
 cc_binary(
-    name = "hello_nes",
+    name = "mmc3_nes",
     srcs = ["hello.c"],
+    defines = ["MAPPER_MMC3=1"],
     deps = [
         "//mappers/mmc3",
         "//neslib:globals",
@@ -17,7 +18,30 @@ cc_binary(
 )
 
 platform_target(
-    name = "hello",
+    name = "mmc3",
     platform = "@crt//platforms/m6502:nintendo-nes",
-    target = ":hello_nes",
+    target = ":mmc3_nes",
+)
+
+cc_binary(
+    name = "mmc5_nes",
+    srcs = ["hello.c"],
+    defines = ["MAPPER_MMC5=1"],
+    deps = [
+        "//mappers/mmc5",
+        "//neslib:globals",
+        "//neslib/ppu",
+        "//neslib/controller",
+        "//neslib/util:debug",
+        "//unscii",
+    ],
+    linkopts = [
+        "--mapfile", "/tmp/hello.map",
+    ],
+)
+
+platform_target(
+    name = "mmc5",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+    target = ":mmc5_nes",
 )
