@@ -294,6 +294,18 @@ irq:
     pla
     rti
 
+;void __fastcall__ set_split(unsigned char ypos);
+_set_split:
+    sta $c000
+    sta $c001
+    cmp #0
+    beq @1
+    sta $e001
+    rts
+@1:
+    sta $e000
+    rts
+
 ;void __fastcall__ mmc3_reg(uint8_t reg, uint8_t val)
 _mmc3_reg:
     pha

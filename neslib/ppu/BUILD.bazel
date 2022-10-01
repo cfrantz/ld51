@@ -8,3 +8,33 @@ cc_library(
         "//neslib:globals",
     ],
 )
+
+cc_library(
+    name = "oam",
+    srcs = ["oam.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+    ],
+)
+
+cc_library(
+    name = "scroll",
+    srcs = ["scroll.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+    ],
+)
+
+cc_library(
+    name = "ppu",
+    srcs = ["ppu.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        ":palette",
+        ":oam",
+        ":scroll",
+        "//neslib:globals",
+    ],
+)

@@ -1,7 +1,7 @@
 ; Globals used by neslib
 
 .exportzp _frame_count
-.exportzp nptr, nlen
+.exportzp nptr, nlen, ntmp
 .exportzp pal_update, pal_ptr
 .exportzp _ppu_macro_len
 .exportzp ppu_ctrl_var, ppu_mask_var
@@ -15,7 +15,8 @@
 .ZEROPAGE
 _frame_count:       .res 2
 nptr:               .res 2
-nlen:               .res 1
+nlen:               .res 2
+ntmp:               .res 4
 pal_update:         .res 1
 pal_ptr:            .res 2
 

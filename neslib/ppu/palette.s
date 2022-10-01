@@ -1,7 +1,7 @@
 ;NES hardware-dependent functions by Shiru (shiru@mail.ru)
 ;Feel free to do anything you want with this code, consider it Public Domain
 
-.include "../globals.inc"
+.include "neslib/globals.inc"
 .import popa
 
 .export _pal_all,_pal_bg,_pal_spr,_pal_col,_pal_clear

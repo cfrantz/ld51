@@ -1,5 +1,5 @@
 .importzp _frame_count
-.importzp nptr, nlen
+.importzp nptr, nlen, ntmp
 .importzp pal_update, pal_ptr
 .importzp _ppu_macro_len
 .importzp ppu_ctrl_var, ppu_mask_var
