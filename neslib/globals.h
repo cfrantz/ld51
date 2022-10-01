@@ -10,4 +10,4 @@ extern uint8_t ppu_macro_len;
 
 extern uint8_t ppu_macro[64];
 
-#endif // EMPTYNES_NESLIB_GLOBALS_H
+#endif  // EMPTYNES_NESLIB_GLOBALS_H

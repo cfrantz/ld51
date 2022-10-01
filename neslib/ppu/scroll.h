@@ -1,6 +1,7 @@
 #ifndef EMPTYNES_NESLIB_PPU_SCROLL_H_
 #define EMPTYNES_NESLIB_PPU_SCROLL_H_
 #include <stdint.h>
+
 #include "util/compiler.h"
 
 /*

@@ -1,7 +1,12 @@
 #ifndef EMPTYNES_NESLIB_PPU_OAM_H_
 #define EMPTYNES_NESLIB_PPU_OAM_H_
 #include <stdint.h>
+
 #include "util/compiler.h"
+
+#define OAM_FLIP_V		0x80
+#define OAM_FLIP_H		0x40
+#define OAM_BEHIND		0x20
 
 void fastcall oam_clear(void);
 void fastcall oam_size(uint8_t size);

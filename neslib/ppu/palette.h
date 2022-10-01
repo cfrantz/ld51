@@ -1,6 +1,7 @@
 #ifndef EMPTYNES_NESLIB_PPU_PALETTE_H_
 #define EMPTYNES_NESLIB_PPU_PALETTE_H_
 #include <stdint.h>
+
 #include "util/compiler.h"
 
 void fastcall pal_all(const uint8_t *data);

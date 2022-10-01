@@ -1,7 +1,8 @@
 workspace(name = "com_github_emptynes")
 
 load("//third_party/crt:repos.bzl", "crt_repos")
-crt_repos(local = "../cross_compile/crt")
+crt_repos()
+#crt_repos(local = "../cross_compile/crt")
 load("@crt//:repos.bzl", "crt_repos")
 crt_repos()
 load("@crt//:deps.bzl", "crt_deps")

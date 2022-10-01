@@ -1,0 +1,12 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "controller",
+    hdrs = ["controller.h"],
+    srcs = ["controller.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+        "//util:compiler",
+    ],
+)

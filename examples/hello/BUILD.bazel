@@ -8,6 +8,7 @@ cc_binary(
         "//mappers/mmc3",
         "//neslib:globals",
         "//neslib/ppu",
+        "//neslib/controller",
         "//unscii",
     ],
     linkopts = [

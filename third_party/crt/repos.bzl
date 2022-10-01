@@ -11,7 +11,7 @@ def crt_repos(local=None):
         maybe(
             http_archive,
             name = "crt",
-            sha256 = "4b5020a02cc6a51014307f886b5619c4e19ac67879807d4e00fa71dc97a29735",
-            url = "https://github.com/lowRISC/crt/archive/refs/tags/v0.3.5.tar.gz",
-            strip_prefix = "crt-0.3.5",
+            sha256 = "152669e31463e0a3931aa235515ab61337f915a56b931d95b7b17c3783a7fbaa",
+            url = "https://github.com/cfrantz/crt/archive/refs/tags/v0.3.5-p1.tar.gz",
+            strip_prefix = "crt-0.3.5-p1",
         )

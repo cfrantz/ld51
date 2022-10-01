@@ -137,10 +137,6 @@ waitSync3:
 	cmp _frame_count
 	beq @1
 
-	lda #$fd
-	sta rand_seed
-	sta rand_seed+1
-
 	lda #0
 	sta PPU_SCROLL
 	sta PPU_SCROLL
