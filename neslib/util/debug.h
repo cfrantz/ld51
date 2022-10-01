@@ -5,4 +5,4 @@
 #define xputc(val_) register_write8(0x4018, val_)
 void fastcall xputs(const char *str);
 
-#endif // EMPTYNES_NESLIB_UTIL_DEBUG_H
+#endif  // EMPTYNES_NESLIB_UTIL_DEBUG_H

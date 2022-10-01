@@ -1,5 +1,5 @@
-#ifndef BINARY_H
-#define BINARY_H
+#ifndef EMPTYNES_UTIL_BINARY_H
+#define EMPTYNES_UTIL_BINARY_H
 //////////////////////////////////////////////////////////////////////
 // Macros for expressing a constant as binary
 //////////////////////////////////////////////////////////////////////
@@ -37,4 +37,4 @@
     _binconst(_ashex(g) >> 1), \
     _binconst(_ashex(h) >> 1)
 
-#endif
+#endif  // EMPTYNES_UTIL_BINARY_H

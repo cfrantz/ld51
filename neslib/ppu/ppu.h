@@ -1,5 +1,5 @@
-#ifndef EMPTYNES_NESLIB_PPU_PPU_H_
-#define EMPTYNES_NESLIB_PPU_PPU_H_
+#ifndef EMPTYNES_NESLIB_PPU_PPU_H
+#define EMPTYNES_NESLIB_PPU_PPU_H
 #include <stdint.h>
 
 #include "neslib/ppu/oam.h"
@@ -37,4 +37,4 @@ void fastcall ppu_macro_word(uint16_t b);
 
 void fastcall vram_puts(uint8_t x, uint8_t y, const char *str);
 
-#endif  // EMPTYNES_NESLIB_PPU_PPU_H_
+#endif  // EMPTYNES_NESLIB_PPU_PPU_H

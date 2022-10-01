@@ -6,4 +6,4 @@
 #define register_write16(reg_, val_) ( *(uint16_t*)(reg_) = (uint16_t)(val_) )
 #define register_read16(reg_)        ( *(uint16_t*)(reg_) )
 
-#endif // EMPTYNES_NESLIB_UTIL_REGISTERS_H
+#endif  // EMPTYNES_NESLIB_UTIL_REGISTERS_H

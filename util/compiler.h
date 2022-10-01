@@ -3,4 +3,4 @@
 
 #define fastcall __fastcall__
 
-#endif // EMPTYNES_UTIL_COMPILER_H
+#endif  // EMPTYNES_UTIL_COMPILER_H

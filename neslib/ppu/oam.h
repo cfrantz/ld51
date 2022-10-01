@@ -1,5 +1,5 @@
-#ifndef EMPTYNES_NESLIB_PPU_OAM_H_
-#define EMPTYNES_NESLIB_PPU_OAM_H_
+#ifndef EMPTYNES_NESLIB_PPU_OAM_H
+#define EMPTYNES_NESLIB_PPU_OAM_H
 #include <stdint.h>
 
 #include "util/compiler.h"
@@ -15,4 +15,4 @@ uint8_t fastcall oam_spr(uint8_t x, uint8_t y, uint8_t chrnum, uint8_t attr,
 uint8_t fastcall oam_meta_spr(uint8_t x, uint8_t y, uint8_t sprid,
                               const uint8_t *data);
 void fastcall oam_hide_rest(uint8_t sprid);
-#endif  // EMPTYNES_NESLIB_PPU_OAM_H_
+#endif  // EMPTYNES_NESLIB_PPU_OAM_H

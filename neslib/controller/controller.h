@@ -1,5 +1,5 @@
-#ifndef EMPTYNES_NESLIB_CONTROLLER_PAD_H_
-#define EMPTYNES_NESLIB_CONTROLLER_PAD_H_
+#ifndef EMPTYNES_NESLIB_CONTROLLER_CONTROLLER_H
+#define EMPTYNES_NESLIB_CONTROLLER_CONTROLLER_H
 #include <stdint.h>
 #include "util/compiler.h"
 
@@ -16,4 +16,4 @@ uint8_t fastcall pad_poll(uint8_t pad);
 uint8_t fastcall pad_trigger(uint8_t pad);
 uint8_t fastcall pad_state(uint8_t pad);
 
-#endif  // EMPTYNES_NESLIB_CONTROLLER_PAD_H_
+#endif  // EMPTYNES_NESLIB_CONTROLLER_CONTROLLER_H
