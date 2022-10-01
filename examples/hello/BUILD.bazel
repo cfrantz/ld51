@@ -1,0 +1,22 @@
+package(default_visibility = ["//visibility:public"])
+load("@crt//rules:transition.bzl", "platform_target")
+
+cc_binary(
+    name = "hello_nes",
+    srcs = ["hello.c"],
+    deps = [
+        "//mappers/mmc3",
+        "//neslib:globals",
+        "//neslib/ppu",
+        "//unscii",
+    ],
+    linkopts = [
+        "--mapfile", "/tmp/hello.map",
+    ],
+)
+
+platform_target(
+    name = "hello",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+    target = ":hello_nes",
+)

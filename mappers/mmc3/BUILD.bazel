@@ -2,6 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "mmc3",
+    hdrs = ["mmc3.h"],
     srcs = ["crt0.s"],
     target_compatible_with = ["@crt//antique/cpu:m6502"],
     linkopts = [
@@ -10,6 +11,7 @@ cc_library(
     deps = [
         "mmc3.ld",
         "//neslib:globals",
+        "//util:compiler",
     ],
 
 )

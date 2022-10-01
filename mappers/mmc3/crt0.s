@@ -5,7 +5,7 @@
 NES_MAPPER				=4	;mapper number
 NES_PRG_BANKS			=2	;number of 16K PRG banks, change to 2 for NROM256
 NES_CHR_BANKS			=1	;number of 8K CHR banks
-NES_MIRRORING			=8	;0 horizontal, 1 vertical, 8 four screen
+NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
 
 
 .define SPEED_FIX		0	;zero if you want to handle PAL/NTSC speed difference by yourself
@@ -13,7 +13,12 @@ NES_MIRRORING			=8	;0 horizontal, 1 vertical, 8 four screen
 
     .export _exit,__STARTUP__:absolute=1
     .export _mmc3_reg
+    .export _set_split
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
+
+	.import _pal_bright
+	.import _pal_clear
+	.import _oam_clear
 
 ; Linker generated symbols
 	.import __RAM_START__   ,__RAM_SIZE__
@@ -100,9 +105,9 @@ clearRAM:
     bne @1
 
 	lda #4
-	;jsr _pal_bright
-	;jsr _pal_clear
-	;jsr _oam_clear
+	jsr _pal_bright
+	jsr _pal_clear
+	jsr _oam_clear
 
     jsr	zerobss
 	jsr	copydata
@@ -243,7 +248,7 @@ nmi:
     sta $e001
 
 	inc _frame_count
-    bcc @framecount_done
+    bne @framecount_done
 	inc _frame_count+1
 @framecount_done:
 

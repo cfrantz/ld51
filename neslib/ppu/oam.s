@@ -2,6 +2,12 @@
 .include "neslib/nes.inc"
 .include "zeropage.inc"
 
+.export _oam_clear
+.export _oam_size
+.export _oam_spr
+.export _oam_meta_spr
+.export _oam_hide_rest
+
 ;void __fastcall__ oam_clear(void);
 _oam_clear:
 	ldx #0

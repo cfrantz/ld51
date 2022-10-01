@@ -2,39 +2,50 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "palette",
+    hdrs = ["palette.h"],
     srcs = ["palette.s"],
     target_compatible_with = ["@crt//antique/cpu:m6502"],
     deps = [
         "//neslib:globals",
+        "//util:compiler",
     ],
 )
 
 cc_library(
     name = "oam",
+    hdrs = ["oam.h"],
     srcs = ["oam.s"],
     target_compatible_with = ["@crt//antique/cpu:m6502"],
     deps = [
         "//neslib:globals",
+        "//util:compiler",
     ],
 )
 
 cc_library(
     name = "scroll",
+    hdrs = ["scroll.h"],
     srcs = ["scroll.s"],
     target_compatible_with = ["@crt//antique/cpu:m6502"],
     deps = [
         "//neslib:globals",
+        "//util:compiler",
     ],
 )
 
 cc_library(
     name = "ppu",
-    srcs = ["ppu.s"],
+    hdrs = ["ppu.h"],
+    srcs = [
+        "ppu.s",
+        "vram.c",
+    ],
     target_compatible_with = ["@crt//antique/cpu:m6502"],
     deps = [
         ":palette",
         ":oam",
         ":scroll",
         "//neslib:globals",
+        "//util:compiler",
     ],
 )

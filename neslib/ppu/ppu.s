@@ -2,6 +2,7 @@
 .include "neslib/nes.inc"
 .import popa, popax
 
+.export _ppu_off
 .export _ppu_on_all
 .export _ppu_on_bg
 .export _ppu_on_spr
@@ -17,6 +18,21 @@
 .export _vram_put
 .export _vram_fill
 .export _vram_inc
+
+;void __fastcall__ ppu_off(void);
+_ppu_off:
+	lda ppu_mask_var
+	and #%00011000
+	beq @1
+	jsr _ppu_waitnmi
+@1:
+	lda ppu_mask_var
+	and #%11100111
+	sta ppu_mask_var
+	sta PPU_MASK
+	lda #0
+	sta PPU_CTRL
+	rts
 
 ;void __fastcall__ ppu_on_all(void);
 _ppu_on_all:

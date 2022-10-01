@@ -4,7 +4,12 @@
 .include "neslib/globals.inc"
 .import popa
 
-.export _pal_all,_pal_bg,_pal_spr,_pal_col,_pal_clear
+.export _pal_all
+.export _pal_bg
+.export _pal_spr
+.export _pal_col
+.export _pal_clear
+.export _pal_bright
 
 
 

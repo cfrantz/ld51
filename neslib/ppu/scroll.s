@@ -2,6 +2,9 @@
 .include "neslib/nes.inc"
 .import popax
 
+.export _scroll0
+.export _scroll1
+
 ;; The commented version below is the mmc3 implementation.
 ;; Each mapper package should implement this routine in the
 ;; appropriate way for that mapper.
