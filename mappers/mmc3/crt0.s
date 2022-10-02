@@ -14,6 +14,7 @@ NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
     .export _exit,__STARTUP__:absolute=1
     .export _mmc3_reg
     .export _set_split
+    .export nmi, irq
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
 
 	.import _pal_bright
@@ -226,6 +227,7 @@ nmi:
     bne @updName
 	ldy #0
     sty _ppu_macro_len
+    ;.byte $f2
 
 @updates_done:
 	stx PPU_ADDR

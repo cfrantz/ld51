@@ -53,8 +53,7 @@ void main(void) {
     pal_all(level_palette);  // set palette for sprites
     oam_size(1);
 
-    growing_tree();
-    screen_put();
+    screen_regenerate(1, 1);
 
     ppu_on_all();
     set_split(31);

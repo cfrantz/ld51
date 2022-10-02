@@ -11,3 +11,29 @@ tiles:
       height: 2
       colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
       filename: 'resources/gfx/forest.png'
+
+    - offset: 0xa0
+      origin: [0, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+      filename: 'resources/gfx/gray.png'
+    - offset: 0xa4
+      origin: [16, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+      filename: 'resources/gfx/gray.png'
+    - offset: 0xa8
+      origin: [32, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+      filename: 'resources/gfx/gray.png'
+    - offset: 0xac
+      origin: [48, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+      filename: 'resources/gfx/gray.png'
+

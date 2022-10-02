@@ -26,7 +26,7 @@
 uint8_t maze[12][8];
 uint8_t cells[CELLS_LEN];
 uint8_t ncells = 0;
-uint8_t grid[HEIGHT*2+1][16];
+uint8_t grid[HEIGHT*2+2][16];
 
 
 static uint8_t rand_range(uint8_t max, uint8_t mask) {
@@ -74,20 +74,31 @@ static uint8_t nextdir(uint8_t chosen) {
     }
 }
 
-static void render(uint8_t palette) {
+static void render(void) {
     uint8_t x, y, dir;
-    memset(grid, palette | 16, sizeof(grid));
+    memset(grid, level_fill, sizeof(grid));
     for(y=0; y<HEIGHT; ++y) {
     for(x=0; x<WIDTH; ++x) {
         dir = maze[y][x];
         if (!dir) continue;
-        grid[y*2+1][x*2+1] = palette| 0;
-        if (dir & NORTH) grid[y*2+0][x*2+1] = palette| 0;
-        if (dir & SOUTH) grid[y*2+2][x*2+1] = palette| 0;
-        if (dir & EAST)  grid[y*2+1][x*2+2] = palette| 0;
-        if (dir & WEST)  grid[y*2+1][x*2+0] = palette| 0;
+        grid[1+y*2+1][x*2+1] = level_floor;
+        if (dir & NORTH) grid[1+y*2+0][x*2+1] = level_floor;
+        if (dir & SOUTH) grid[1+y*2+2][x*2+1] = level_floor;
+        if (dir & EAST)  grid[1+y*2+1][x*2+2] = level_floor;
+        if (dir & WEST)  grid[1+y*2+1][x*2+0] = level_floor;
     }
     }
+
+    // Forcibly place the exit
+    grid[0][6] = 0xd4;
+    grid[1][6] = 0xd5;
+    grid[2][6] = level_floor;
+    grid[0][7] = 0xc4;
+    grid[1][7] = 0xc4;
+    grid[2][7] = level_floor;
+    grid[0][8] = 0xd4;
+    grid[1][8] = 0xd5;
+    grid[2][8] = level_floor;
 }
 
 static uint8_t cells_last(void) {
@@ -98,16 +109,13 @@ static uint8_t cells_last(void) {
     return i;
 }
 
-void growing_tree(void) {
-    uint8_t x, y, nx, ny, index, dir, chosen;
+void growing_tree(uint8_t x, uint8_t y) {
+    uint8_t nx, ny, index, dir, chosen;
     memset(maze, 0, sizeof(maze));
 
     ncells = 0;
     memset(cells, 0xff, sizeof(cells));
 
-    x = rand_range(WIDTH, 8-1);
-    y = rand_range(HEIGHT, 16-1);
-    //printf("start = %d, %d\n", x, y);
     cells[++ncells] = (y<<4) | x;
     index = ncells;
     while(index) {
@@ -130,7 +138,6 @@ void growing_tree(void) {
                 break;
             }
         }
-        //printf("del = %d\n", index);
         if (index) cells[index] = 0xFF;
         index = cells_last();
     }
@@ -139,25 +146,6 @@ void growing_tree(void) {
 
 uint8_t fastcall screen_get(uint8_t x, uint8_t y) {
     return grid[y][x];
-}
-
-void generate(void) {
-    int8_t i;
-
-    for(i=4; i>=0; --i) {
-        pal_bright(i);
-        ppu_waitnmi();
-        ppu_waitnmi();
-    }
-    ppu_off();
-    growing_tree();
-    screen_put();
-    ppu_on_all();
-    for(i=0; i<5; ++i) {
-        pal_bright(i);
-        ppu_waitnmi();
-        ppu_waitnmi();
-    }
 }
 
 
@@ -172,7 +160,7 @@ void screen_load_one(uint8_t scrn) {
     static uint8_t x, y, i, a, h, t;
     static uint8_t *p;
 
-    h = scrn==0 ? 13: 12;
+    h = 13;
     p = screens[scrn];
     vram_adr(ppu_dests[scrn]);
     for(y=0;y<h; ++y) {
@@ -199,35 +187,14 @@ void screen_load_one(uint8_t scrn) {
     }
 }
 
-void screen_put(void) {
-    render(1 << 6);
+void screen_regenerate(uint8_t x, uint8_t y) {
+    printf("regenerate %d %d\n", x, y);
+    ppu_off();
+    growing_tree(x/2, y/2);
+    render();
     screen_load_one(0);
     screen_load_one(1);
-    /*
-    uint8_t x, y, tile;
-    vram_adr(0x2000);
-    for(x=0; x<128; ++x) {
-        vram_put(0);
-    }
-    for(y=0; y<HEIGHT*2+1; ++y) {
-        if (y == 13) {
-            for(x=0; x<64; ++x) {
-                vram_put(0);
-            }
-            vram_adr(0x2800);
-        }
-        for(x=0; x<32; ++x) {
-            tile = grid[y][x & 15];
-            if (tile == 0) {
-                vram_put(0x20);
-                vram_put(0x20);
-            } else {
-                vram_put(0x84);
-                vram_put(0x84);
-            }
-        }
-    }
-    */
+    ppu_on_all();
 }
 
 /*

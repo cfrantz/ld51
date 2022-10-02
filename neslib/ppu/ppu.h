@@ -5,6 +5,7 @@
 #include "neslib/ppu/oam.h"
 #include "neslib/ppu/palette.h"
 #include "neslib/ppu/scroll.h"
+#include "neslib/ppu/uint16.h"
 #include "util/compiler.h"
 
 #define VADDR(x, y) ((0x2000 | ((y) << 5) | x))

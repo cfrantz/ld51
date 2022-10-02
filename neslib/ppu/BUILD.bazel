@@ -34,6 +34,17 @@ cc_library(
 )
 
 cc_library(
+    name = "uint16",
+    hdrs = ["uint16.h"],
+    srcs = ["uint16.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    deps = [
+        "//neslib:globals",
+        "//util:compiler",
+    ],
+)
+
+cc_library(
     name = "ppu",
     hdrs = ["ppu.h"],
     srcs = [
@@ -45,6 +56,7 @@ cc_library(
         ":palette",
         ":oam",
         ":scroll",
+        ":uint16",
         "//neslib:globals",
         "//util:compiler",
     ],

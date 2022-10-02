@@ -193,6 +193,7 @@ uint8_t item_taken[256];
 #pragma bss-name(pop)
 */
 uint8_t player_has_item[8];
+uint16_t player_timer;
 
 const uint8_t sword_frames[] = {0, 12, 12, 12, 10, 8, 6, 4, 2};
 uint16_t swordx, swordy;
@@ -261,16 +262,16 @@ void player_input(void) {
         sword_timer = sizeof(sword_frames) - 1;
     } else if (player_pad & PAD_LEFT) {
         entity_facing[0] = 0;
-        entity_vx[0] = -0x180;
+        entity_vx[0] = -0x200;
     } else if (player_pad & PAD_RIGHT) { 
         entity_facing[0] = 1;
-        entity_vx[0] = 0x180;
+        entity_vx[0] = 0x200;
     } else if (player_pad & PAD_UP) {
         entity_facing[0] = 2;
-        entity_vy[0] = -0x180;
+        entity_vy[0] = -0x200;
     } else if (player_pad & PAD_DOWN) { 
         entity_facing[0] = 3;
-        entity_vy[0] = 0x180;
+        entity_vy[0] = 0x200;
     }
 }    
 
@@ -306,8 +307,8 @@ void player_display(void) {
     scrollx = 0;
     if (entity_posy[0] < 104) {
         scrolly = 0;
-    } else if (entity_posy[0] > 289) {
-        scrolly = 185;
+    } else if (entity_posy[0] > 311) {
+        scrolly = 207;
     } else {
         scrolly = entity_posy[0] - 104;
     }
@@ -425,6 +426,7 @@ uint8_t player_check_exit(void) {
 }
 
 void player_init(uint8_t x, uint8_t y) {
+    player_timer = 600;
     entity_id[0] = 0;
     entity_posx[0] = x*16;
     entity_posy[0] = y*16;
@@ -592,5 +594,16 @@ void entity_all(void) {
         if ((entity_id[index] & 8) == 0) {
             entity_move();
         }
+    }
+    player_timer -= 1;
+    if (player_timer < 6) {
+        pal_bright(player_timer);
+    }
+    if (player_timer >= 595) {
+        pal_bright(599 - player_timer);
+    }
+    if (player_timer == 0) {
+        screen_regenerate( entity_posx[0] / 16, entity_posy[0] / 16);
+        player_timer = 600;
     }
 }
