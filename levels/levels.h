@@ -3,8 +3,13 @@
 #include <stdint.h>
 
 typedef struct level {
+    uint8_t name[32];
     uint8_t objset[256];
     uint8_t palette[32];
+    struct {
+        uint8_t x, y;
+    } start;
+    uint8_t next;
     uint8_t floor;
     uint8_t fill;
 } level_t;

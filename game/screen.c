@@ -190,7 +190,7 @@ void screen_load_one(uint8_t scrn) {
 void screen_regenerate(uint8_t x, uint8_t y) {
     printf("regenerate %d %d\n", x, y);
     ppu_off();
-    growing_tree(x/2, y/2);
+    growing_tree(x/2, (y-1)/2);
     render();
     screen_load_one(0);
     screen_load_one(1);

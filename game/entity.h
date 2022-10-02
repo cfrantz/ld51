@@ -14,6 +14,7 @@ extern void player_display(void);
 extern uint8_t player_check_exit(void);
 
 extern void player_init(uint8_t x, uint8_t y);
+extern void player_init_once(uint8_t x, uint8_t y);
 extern void entity_all(void);
 extern void entity_load_screen(uint8_t dmap);
 #endif // LD43_GAME_ENTITY_H

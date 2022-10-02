@@ -1,39 +1,82 @@
 tiles:
-    - offset: 0x80
-      origin: [0, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
-      filename: 'resources/gfx/forest.png'
-    - offset: 0x84
-      origin: [16, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
-      filename: 'resources/gfx/forest.png'
+  # Forest
+  - offset: 0x80
+    origin: [0, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
+    filename: 'resources/gfx/forest.png'
+  - offset: 0x84
+    origin: [16, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
+    filename: 'resources/gfx/forest.png'
 
-    - offset: 0xa0
-      origin: [0, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
-      filename: 'resources/gfx/gray.png'
-    - offset: 0xa4
-      origin: [16, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
-      filename: 'resources/gfx/gray.png'
-    - offset: 0xa8
-      origin: [32, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
-      filename: 'resources/gfx/gray.png'
-    - offset: 0xac
-      origin: [48, 0]
-      width: 2
-      height: 2
-      colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
-      filename: 'resources/gfx/gray.png'
+  # Dungeon
+  - offset: 0x88
+    origin: [32, 0]
+    width: 2
+    height: 2
+    colormap: [ 0xff000000, 0xff002a88, 0xff155fd9, 0xff64b0ff ]
+    filename: 'resources/gfx/forest.png'
+  - offset: 0x8c
+    origin: [48, 0]
+    width: 2
+    height: 2
+    colormap: [ 0xff000000, 0xff002a88, 0xff155fd9, 0xff64b0ff ]
+    filename: 'resources/gfx/forest.png'
+
+  # Ocean
+  - offset: 0x90
+    origin: [0, 16]
+    width: 2
+    height: 2
+    colormap: [ 0xff000000, 0xff155fd9, 0xff0c9300, 0xffffffff ]
+    filename: 'resources/gfx/forest.png'
+  - offset: 0x94
+    origin: [16, 16]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xffe4e594, 0xffbcbe00, 0xffffffff ]
+    filename: 'resources/gfx/forest.png'
+
+  # Cave
+  - offset: 0x98
+    origin: [32, 16]
+    width: 2
+    height: 2
+    colormap: [ 0xff000000, 0xff002a88, 0xff155fd9, 0xffffffff ]
+    filename: 'resources/gfx/forest.png'
+  - offset: 0x9c
+    origin: [48, 16]
+    width: 2
+    height: 2
+    colormap: [ 0xff000000, 0xff002a88, 0xff155fd9, 0xffffffff ]
+    filename: 'resources/gfx/forest.png'
+
+  - offset: 0xa0
+    origin: [0, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+    filename: 'resources/gfx/gray.png'
+  - offset: 0xa4
+    origin: [16, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+    filename: 'resources/gfx/gray.png'
+  - offset: 0xa8
+    origin: [32, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+    filename: 'resources/gfx/gray.png'
+  - offset: 0xac
+    origin: [48, 0]
+    width: 2
+    height: 2
+    colormap: [0xff000000, 0xff666666, 0xffadadad, 0xffffffff]
+    filename: 'resources/gfx/gray.png'
 

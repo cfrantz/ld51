@@ -392,36 +392,25 @@ void item_spawn(uint8_t *spawns) {
 
 void entity_load_screen(uint8_t dmap) {
     curmap = dmap;
-    //screen_load(dmap);
-    index = 1;
-    //entity_spawn(screen_get_spawns(dmap));
-    //item_spawn(screen_get_items(dmap));
+    rand_seed(0);
+    screen_regenerate(entity_posx[0]/16, entity_posy[0]/16);
+    /*
+    entity_posx[0] &= ~15;
+    entity_posy[0] &= ~15;
+    entity_subpixx[0] = 0;
+    entity_subpixy[0] = 0;
+    */
     player_display();
 }
 
 uint8_t player_check_exit(void) {
-    /*
     static uint8_t i, x, y;
 
     x = (entity_posx[0] + 8) / 16;
     y = (entity_posy[0] + 8) / 16;
-    for(i=0; i<8; ++i) {
-        if (x >= screen_exit_x0[i] &&
-            x < screen_exit_x1[i] &&
-            y >= screen_exit_y0[i] &&
-            y < screen_exit_y1[i]) {
-            entity_posx[0] = screen_exit_dx[i]*16;
-            entity_posy[0] = screen_exit_dy[i]*16;
-            if (entity_posx[0] == 0) entity_posx[0] = 9;
-            if (entity_posy[0] == 0) entity_posy[0] = 9;
-            ppu_off();
-            entity_load_screen(screen_exit_dmap[i]);
-
-            ppu_on_all();
-            return 1;
-        }
+    if (y < 1) {
+        return 1;
     }
-    */
     return 0;
 }
 
@@ -430,7 +419,13 @@ void player_init(uint8_t x, uint8_t y) {
     entity_id[0] = 0;
     entity_posx[0] = x*16;
     entity_posy[0] = y*16;
+    entity_subpixx[0] = 0;
+    entity_subpixy[0] = 0;
     entity_facing[0] = 3;
+}
+
+void player_init_once(uint8_t x, uint8_t y) {
+    player_init(x, y);
     sword_damage = 3;
     for(tmp=0; tmp<8; tmp++) {
         player_has_item[0] = 0;
@@ -596,14 +591,14 @@ void entity_all(void) {
         }
     }
     player_timer -= 1;
-    if (player_timer < 6) {
+    if (player_timer < 5) {
         pal_bright(player_timer);
     }
     if (player_timer >= 595) {
         pal_bright(599 - player_timer);
     }
     if (player_timer == 0) {
-        screen_regenerate( entity_posx[0] / 16, entity_posy[0] / 16);
+        entity_load_screen(curmap);
         player_timer = 600;
     }
 }

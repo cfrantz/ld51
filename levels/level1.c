@@ -1,10 +1,10 @@
 #include "levels/levels.h"
-#pragma rodata-name(push, "LVLDAT0")
-const level_t level = {
-    /* name= */ "             FOREST",
+#pragma rodata-name(push, "LVLDAT1")
+const level_t level1 = {
+    /* name= */ "             OCEAN",
     /* objset= */ {
         // 0
-        0x80,0x81,0x82,0x83,
+        0x94,0x95,0x96,0x97,
         0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,
@@ -28,7 +28,7 @@ const level_t level = {
         0x00,0x00,0x00,0x00,
 
         // 16
-        0x84,0x85,0x86,0x87,
+        0x90,0x91,0x92,0x93,
         0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,
@@ -43,8 +43,8 @@ const level_t level = {
     /* pallete= */ {
         // Background palette
         0x0f, 0x12, 0x16, 0x30,  // text: black, blue, red, white.
-        0x0f, 0x17, 0x1a, 0x2a,  // forest: black, brown, green, light green.
-        0x0f, 0x07, 0x17, 0x0f,  // black, brown, light brown, black
+        0x0f, 0x11, 0x21, 0x30,  // ocean: black, blue, blue, white.
+        0x0f, 0x28, 0x38, 0x30,  // sand: black, drk yellow, yello, white.
         0x0f,0x00,0x10,0x30,     // greys
 
         // Sprite palette
@@ -55,8 +55,8 @@ const level_t level = {
     },
 
     /* start= */ { 7, 24 },
-    /* next= */ 1,
-    /* floor= */ 0x40,
+    /* next= */ 2,
+    /* floor= */ 0x80,
     /* fill= */ 0x50,
 };
 #pragma rodata-name(pop)

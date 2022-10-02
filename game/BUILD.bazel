@@ -12,6 +12,16 @@ cc_library(
 )
 
 cc_library(
+    name = "transition",
+    srcs = ["transition.c"],
+    hdrs = ["transition.h"],
+    deps = [
+        "//neslib/ppu",
+        "//levels",
+    ],
+)
+
+cc_library(
     name = "entity",
     srcs = ["entity.c"],
     hdrs = ["entity.h"],

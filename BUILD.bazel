@@ -7,6 +7,7 @@ cc_binary(
     deps = [
         "//game:entity",
         "//game:screen",
+        "//game:transition",
         "//levels",
         "//mappers/mmc3",
         "//neslib:globals",

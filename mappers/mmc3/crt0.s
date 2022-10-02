@@ -3,7 +3,7 @@
 
 
 NES_MAPPER				=4	;mapper number
-NES_PRG_BANKS			=2	;number of 16K PRG banks, change to 2 for NROM256
+NES_PRG_BANKS			=4	;number of 16K PRG banks, change to 2 for NROM256
 NES_CHR_BANKS			=1	;number of 8K CHR banks
 NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
 
@@ -14,7 +14,7 @@ NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
     .export _exit,__STARTUP__:absolute=1
     .export _mmc3_reg
     .export _set_split
-    .export nmi, irq
+    .export nmi, irq, mmc3boot
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
 
 	.import _pal_bright
@@ -44,6 +44,7 @@ NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
 
 .segment "STARTUP"
 
+    .byte "STARTUP"
 start:
 _exit:
 
@@ -356,7 +357,7 @@ mmc3boot:
     lda #0
     jsr mmc3_reg
     inx
-    lda #1
+    lda #$fd
     jsr mmc3_reg
     
     ; Enable WRAM at $6000
