@@ -1,0 +1,17 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "vrc7",
+    hdrs = ["vrc7.h"],
+    srcs = ["crt0.s"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    linkopts = [
+        "-C", "$(location :vrc7.ld)",
+    ],
+    deps = [
+        "vrc7.ld",
+        "//neslib:globals",
+        "//util:compiler",
+    ],
+
+)

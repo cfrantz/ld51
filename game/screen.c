@@ -188,7 +188,7 @@ void screen_load_one(uint8_t scrn) {
 }
 
 void screen_regenerate(uint8_t x, uint8_t y) {
-    printf("regenerate %d %d\n", x, y);
+    //printf("regenerate %d %d\n", x, y);
     ppu_off();
     growing_tree(x/2, (y-1)/2);
     render();
@@ -196,19 +196,3 @@ void screen_regenerate(uint8_t x, uint8_t y) {
     screen_load_one(1);
     ppu_on_all();
 }
-
-/*
-void screen_load(uint8_t id) {
-    static uint8_t n, i;
-    set_mmc3_low_bank(id >> 3);
-    n = id & 7;
-    pal_all(levels0[n].palette);
-    screen_copy_to_ram(n);
-    for(i=0; i<4; i++) {
-        screen_load_one(i);
-    }
-    for(i=0; i<6; i++) {
-        mmc3_reg(i, levels0[n].chrbanks[i]);
-    }
-}
-*/

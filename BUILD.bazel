@@ -4,12 +4,17 @@ load("@crt//rules:transition.bzl", "platform_target")
 cc_binary(
     name = "ld51_nes",
     srcs = ["main.c"],
+    defines = [
+        #"MAPPER_MMC3=1",
+        "MAPPER_VRC7=1",
+    ],
     deps = [
         "//game:entity",
         "//game:screen",
         "//game:transition",
         "//levels",
-        "//mappers/mmc3",
+        #"//mappers/mmc3",
+        "//mappers/vrc7",
         "//neslib:globals",
         "//neslib/ppu",
         "//neslib/controller",
