@@ -11,10 +11,9 @@
         a, b, c, d, e, f, g, h
 #endif
 
-unsigned char unscii[256 * 8 * 2] = {
+unsigned char unscii[128 * 8 * 2] = {
 #include "ascii-ctrl.h"
 #include "ascii-symdigit.h"
 #include "ascii-upper.h"
 #include "ascii-lower.h"
-#include "unscii-pseudogfx.h"
 };

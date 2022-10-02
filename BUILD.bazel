@@ -1,1 +1,31 @@
 package(default_visibility = ["//visibility:public"])
+load("@crt//rules:transition.bzl", "platform_target")
+
+cc_binary(
+    name = "ld51_nes",
+    srcs = ["main.c"],
+    deps = [
+        "//game:entity",
+        "//game:screen",
+        "//levels",
+        "//mappers/mmc3",
+        "//neslib:globals",
+        "//neslib/ppu",
+        "//neslib/controller",
+        "//neslib/util:debug",
+        "//resources:sprites",
+        "//unscii",
+        "//resources:background",
+    ],
+    linkopts = [
+        "-vm", "--mapfile", "/tmp/ld51.map",
+#        "-Wl", "--start-group,$(location //resources:sprites),$(location //unscii),--end-group",
+
+    ],
+)
+
+platform_target(
+    name = "ld51",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+    target = ":ld51_nes",
+)

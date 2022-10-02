@@ -303,6 +303,9 @@ mmc5boot:
     stx $5100
     ; Configure MMC5 for a single 8K CHR bank
     stx $5101
+    stx $5127
+    stx $512b
+
     ; Configure MMC5 to allow writing to WRAM at $6000
     ldx #2
     stx $5102

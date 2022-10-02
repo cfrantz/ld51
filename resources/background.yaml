@@ -1,0 +1,13 @@
+tiles:
+    - offset: 0x80
+      origin: [0, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
+      filename: 'resources/gfx/forest.png'
+    - offset: 0x84
+      origin: [16, 0]
+      width: 2
+      height: 2
+      colormap: [0xff000000, 0xff994e00, 0xff0c9300, 0xff5ce430]
+      filename: 'resources/gfx/forest.png'

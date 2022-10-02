@@ -1,0 +1,35 @@
+package(default_visibility = ["//visibility:public"])
+load("@crt//rules:transition.bzl", "platform_target")
+
+genrule(
+    name = "sprite_data",
+    outs = ["sprite_data.h"],
+    srcs = [
+        "sprites.yaml",
+    ] + glob(["gfx/**"]),
+    cmd = "$(location mktiles.py) $(location sprites.yaml) > $@",
+    tools = [ "mktiles.py"],
+)
+
+cc_library(
+    name = "sprites",
+    srcs = ["sprites.c"],
+    textual_hdrs = [":sprite_data"],
+)
+
+
+genrule(
+    name = "background_data",
+    outs = ["background_data.h"],
+    srcs = [
+        "background.yaml",
+    ] + glob(["gfx/**"]),
+    cmd = "$(location mktiles.py) $(location background.yaml) --range 0x80-0xff > $@",
+    tools = [ "mktiles.py"],
+)
+
+cc_library(
+    name = "background",
+    srcs = ["background.c"],
+    textual_hdrs = [":background_data"],
+)

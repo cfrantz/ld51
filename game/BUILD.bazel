@@ -1,0 +1,24 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "screen",
+    srcs = ["screen.c"],
+    hdrs = ["screen.h"],
+    deps = [
+        "//neslib/ppu",
+        "//neslib/util:random",
+        "//levels",
+    ],
+)
+
+cc_library(
+    name = "entity",
+    srcs = ["entity.c"],
+    hdrs = ["entity.h"],
+    deps = [
+        ":screen",
+        "//neslib/ppu",
+        "//neslib/controller",
+        "//neslib/util:random",
+    ],
+)

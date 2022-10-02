@@ -1,0 +1,211 @@
+tiles:
+    - offset: 0x00
+      width: 2
+      height: 2
+      data:
+          - "2222222222222222"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2              2"
+          - "2222222222222222"
+
+
+
+
+    - offset: 0xfc
+      width: 2
+      height: 2
+      data:
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+
+
+    - offset: 0x10
+      origin: [0, 0]
+      width: 2
+      height: 2
+      colormap: [0x00000000, 0xff5e3000, 0xffffc6c6, 0xff1435de]
+      filename: 'resources/gfx/player.png'
+    - offset: 0x14
+      origin: [16, 0]
+      width: 2
+      height: 2
+      colormap: [0x00000000, 0xff5e3000, 0xffffc6c6, 0xff1435de]
+      filename: 'resources/gfx/player.png'
+    - offset: 0x18
+      origin: [32, 0]
+      width: 2
+      height: 2
+      colormap: [0x00000000, 0xff5e3000, 0xffffc6c6, 0xff1435de]
+      filename: 'resources/gfx/player.png'
+    - offset: 0x1c
+      origin: [48, 0]
+      width: 2
+      height: 2
+      colormap: [0x00000000, 0xff5e3000, 0xffffc6c6, 0xff1435de]
+      filename: 'resources/gfx/player.png'
+
+    - offset: 0x20
+      origin: [0, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/items1.png'
+    - offset: 0x24
+      origin: [16, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/items1.png'
+    - offset: 0x28
+      origin: [32, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/items1.png'
+    - offset: 0x2c
+      origin: [48, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/items1.png'
+
+    - offset: 0x7c
+      width: 2
+      height: 2
+      data:
+          - "       3        "
+          - " 3     3     3  "
+          - "  3    3    3   "
+          - "   3   3   3    "
+          - "    3  3  3     "
+          - "     3 3 3      "
+          - "      333       "
+          - "3333333333333333"
+          - "      333       "
+          - "     3 3 3      "
+          - "    3  3  3     "
+          - "   3   3   3    "
+          - "  3    3    3   "
+          - " 3     3     3  "
+          - "       3        "
+          - "       3        "
+
+    - offset: 0x78
+      width: 2
+      height: 2
+      data:
+          - "                "
+          - "                "
+          - "       3        "
+          - "   3   3   3    "
+          - "    3  3  3     "
+          - "     3 3 3      "
+          - "      333       "
+          - "  333333333333  "
+          - "      333       "
+          - "     3 3 3      "
+          - "    3  3  3     "
+          - "   3   3   3    "
+          - "       3        "
+          - "       3        "
+          - "                "
+          - "                "
+    - offset: 0x74
+      width: 2
+      height: 2
+      data:
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "       3        "
+          - "     3 3 3      "
+          - "      333       "
+          - "    33333333    "
+          - "      333       "
+          - "     3 3 3      "
+          - "       3        "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+
+    - offset: 0x70
+      width: 2
+      height: 2
+      data:
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "       3        "
+          - "       3        "
+          - "     33333      "
+          - "       3        "
+          - "       3        "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+          - "                "
+
+
+    - offset: 0x80
+      origin: [0, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/enemies1.png'
+    - offset: 0x84
+      origin: [16, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/enemies1.png'
+    - offset: 0x88
+      origin: [32, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/enemies1.png'
+    - offset: 0x8c
+      origin: [48, 0]
+      width: 2
+      height: 2
+      colormap: [0x0, 0xff000000, 0xff0000d9, 0xffffffff]
+      filename: 'resources/gfx/enemies1.png'
+
+
+
+
+
+
