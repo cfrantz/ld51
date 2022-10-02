@@ -76,29 +76,29 @@ static uint8_t nextdir(uint8_t chosen) {
 
 static void render(void) {
     uint8_t x, y, dir;
-    memset(grid, level_fill, sizeof(grid));
+    memset(grid, level.fill, sizeof(grid));
     for(y=0; y<HEIGHT; ++y) {
     for(x=0; x<WIDTH; ++x) {
         dir = maze[y][x];
         if (!dir) continue;
-        grid[1+y*2+1][x*2+1] = level_floor;
-        if (dir & NORTH) grid[1+y*2+0][x*2+1] = level_floor;
-        if (dir & SOUTH) grid[1+y*2+2][x*2+1] = level_floor;
-        if (dir & EAST)  grid[1+y*2+1][x*2+2] = level_floor;
-        if (dir & WEST)  grid[1+y*2+1][x*2+0] = level_floor;
+        grid[1+y*2+1][x*2+1] = level.floor;
+        if (dir & NORTH) grid[1+y*2+0][x*2+1] = level.floor;
+        if (dir & SOUTH) grid[1+y*2+2][x*2+1] = level.floor;
+        if (dir & EAST)  grid[1+y*2+1][x*2+2] = level.floor;
+        if (dir & WEST)  grid[1+y*2+1][x*2+0] = level.floor;
     }
     }
 
     // Forcibly place the exit
     grid[0][6] = 0xd4;
     grid[1][6] = 0xd5;
-    grid[2][6] = level_floor;
+    grid[2][6] = level.floor;
     grid[0][7] = 0xc4;
     grid[1][7] = 0xc4;
-    grid[2][7] = level_floor;
+    grid[2][7] = level.floor;
     grid[0][8] = 0xd4;
     grid[1][8] = 0xd5;
-    grid[2][8] = level_floor;
+    grid[2][8] = level.floor;
 }
 
 static uint8_t cells_last(void) {
@@ -168,8 +168,8 @@ void screen_load_one(uint8_t scrn) {
             for(x=0; x<16; ++x) {
                 t = y*16+x;
                 a = p[t] * 4;
-                vram_put(level_objset[a + i + 0]);
-                vram_put(level_objset[a + i + 2]);
+                vram_put(level.objset[a + i + 0]);
+                vram_put(level.objset[a + i + 2]);
             }
         }
     }

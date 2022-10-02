@@ -2,9 +2,13 @@
 #define LD51_LEVELS_LEVELS_H
 #include <stdint.h>
 
-extern const uint8_t level_palette[];
-extern const uint8_t level_objset[];
-extern const uint8_t level_floor;
-extern const uint8_t level_fill;
+typedef struct level {
+    uint8_t objset[256];
+    uint8_t palette[32];
+    uint8_t floor;
+    uint8_t fill;
+} level_t;
+
+extern const level_t level;
 
 #endif // LD51_LEVELS_LEVELS_H

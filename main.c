@@ -23,21 +23,6 @@ const void* const useless_decl_to_force_linking[] = {
     (const void const*)write,
 };
 
-const uint8_t palette[32] = {
-    // Background palette
-    0x22, 0x03, 0x23, 0x30,  // skyblue, dark purple, med purple, white
-    0x0f, 0x11, 0x21, 0x30,  // black, blue, blue, white
-    0x0f, 0x07, 0x17, 0x0f,  // black, brown, light brown, black
-    0x0f, 0x0a, 0x1a, 0x0f,  // black, green, light green, black
-
-    // Sprite palette
-    0x0f,0x17,0x26,0x12,    // Player
-    0x0f,0x0f,0x12,0x30,    // stuff 1
-    0x0f,0x37,0x07,0x17,    // stuff 2
-    0x0f,0x00,0x10,0x30,    // stuff 3
-};
-const char kHex[] = "0123456789ABCDEF";
-
 uint8_t framenum;
 uint8_t player_pad;
 uint8_t player_pad_changed;
@@ -50,7 +35,7 @@ void main(void) {
     bank_bg(1);
     bank_spr(0);
     ppu_off();
-    pal_all(level_palette);  // set palette for sprites
+    pal_all(level.palette);  // set palette for sprites
     oam_size(1);
 
     screen_regenerate(1, 1);

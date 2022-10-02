@@ -13,10 +13,11 @@ MEMORY {
     # - rodata
     # - data (load)
 
-    # PRG: start = $8000, size = $3f00, file = %O ,fill = yes, define = yes;
+    # ROM starts at $8000
+    BANK0: start = $8000, size = $2000, file = %O ,fill = yes, define = yes;
 
-    # NROM256
-    PRG: start = $8000, size = $7d00, file = %O ,fill = yes, define = yes;
+    # MMC3
+    PRG: start = $A000, size = $5d00, file = %O ,fill = yes, define = yes;
 
     # DPCM Samples at end of the ROM
 
@@ -47,6 +48,7 @@ MEMORY {
 
 SEGMENTS {
     HEADER:   load = HEADER,         type = ro;
+    LVLDAT0:  load = BANK0,          type = ro,  define = yes;
     STARTUP:  load = PRG,            type = ro,  define = yes;
     LOWCODE:  load = PRG,            type = ro,                optional = yes;
     ONCE:     load = PRG,            type = ro,  define = yes, optional = yes;
