@@ -12,6 +12,7 @@ typedef struct level {
     uint8_t next;
     uint8_t floor;
     uint8_t fill;
+    uint8_t song;
 } level_t;
 
 extern const level_t level;

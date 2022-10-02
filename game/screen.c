@@ -5,16 +5,14 @@
 
 #include "game/screen.h"
 #include "levels/levels.h"
-
+#include "music/cfplayer.h"
+#include "music/songs.h"
 #include "neslib/ppu/ppu.h"
 #include "neslib/util/random.h"
 #include "util/compiler.h"
 
 #define WIDTH 7
 #define HEIGHT 12
-
-
-
 
 #define NORTH 1
 #define SOUTH 2
@@ -195,4 +193,5 @@ void screen_regenerate(uint8_t x, uint8_t y) {
     screen_load_one(0);
     screen_load_one(1);
     ppu_on_all();
+    cfplayer_now_playing = song_table[level.song];
 }

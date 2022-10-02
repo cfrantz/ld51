@@ -2,9 +2,13 @@
 
 #include "neslib/ppu/ppu.h"
 #include "levels/levels.h"
+#include "music/cfplayer.h"
 
 void transition(void) {
     uint8_t i;
+    
+    cfplayer_now_playing = 0;
+    cfplayer_reset_song();
 
     ppu_off();
     scroll1(0, 32);

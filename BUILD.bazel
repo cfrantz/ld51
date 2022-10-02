@@ -25,7 +25,7 @@ cc_binary(
     ],
     linkopts = [
         "-vm", "--mapfile", "/tmp/ld51.map",
-#        "-Wl", "--start-group,$(location //resources:sprites),$(location //unscii),--end-group",
+#        "-Wl", "--start-group,$(location //music:cfplayer),$(location //music:songs),$(location //mappers/vrc7),--end-group",
 
     ],
 )

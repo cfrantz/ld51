@@ -17,6 +17,9 @@ NES_MIRRORING			=1	;0 horizontal, 1 vertical, 8 four screen
     .export nmi, irq, vrc7boot
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
 
+    .import _cfplayer_init
+    .import _cfplayer_update_frame
+
 	.import _pal_bright
 	.import _pal_clear
 	.import _oam_clear
@@ -143,6 +146,7 @@ waitSync3:
 	sta PPU_SCROLL
 	sta PPU_SCROLL
 
+    jsr _cfplayer_init
     ; enable interrupts
     cli
 	jmp _main			;no parameters
@@ -258,6 +262,10 @@ nmi:
 	inc _frame_count+1
 @framecount_done:
 
+    ; cfplayer eats a lot of cpu time, so re-enable interrupts
+    ; so the scanline interrupt can always happen on time.
+    cli
+    jsr _cfplayer_update_frame
 @nmiexit:
 	pla
 	tay

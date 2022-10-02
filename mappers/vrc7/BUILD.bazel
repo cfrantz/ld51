@@ -10,6 +10,7 @@ cc_library(
     ],
     deps = [
         "vrc7.ld",
+        "//music:cfplayer",
         "//neslib:globals",
         "//util:compiler",
     ],

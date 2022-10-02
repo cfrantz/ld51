@@ -1,0 +1,16 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "cfplayer",
+    srcs = ["cfplayer.s"],
+    hdrs = ["cfplayer.h"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+)
+
+cc_library(
+    name = "songs",
+    srcs = ["ld51.s"],
+    hdrs = ["songs.h"],
+    target_compatible_with = ["@crt//antique/cpu:m6502"],
+)
+

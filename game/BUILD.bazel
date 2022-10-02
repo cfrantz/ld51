@@ -5,6 +5,8 @@ cc_library(
     srcs = ["screen.c"],
     hdrs = ["screen.h"],
     deps = [
+        "//music:cfplayer",
+        "//music:songs",
         "//neslib/ppu",
         "//neslib/util:random",
         "//levels",
@@ -16,6 +18,7 @@ cc_library(
     srcs = ["transition.c"],
     hdrs = ["transition.h"],
     deps = [
+        "//music:cfplayer",
         "//neslib/ppu",
         "//levels",
     ],

@@ -58,5 +58,6 @@ const level_t level = {
     /* next= */ 1,
     /* floor= */ 0x40,
     /* fill= */ 0x50,
+    /* song= */ 0,
 };
 #pragma rodata-name(pop)
